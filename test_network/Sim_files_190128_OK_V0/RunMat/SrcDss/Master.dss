@@ -1,0 +1,56 @@
+Clear 
+
+!! Test case 
+Set DefaultBaseFrequency=50  ! for European system
+
+new circuit.test
+edit Vsource.Source bus1=source basekv=22 pu=1.0001 phases=3 ISC3=9000  ISC1=5000
+                                                   
+!LINE CODES
+redirect linecode.txt
+redirect Line_indexed_check.txt
+redirect source2txline_ind.txt
+redirect fuse_indexed.txt
+redirect neutral_ind.txt
+!!Transformer
+redirect Transformer_ind.txt
+
+
+
+solve
+
+!LOAD DEFINITIONS 
+redirect LoadShape.txt
+batchedit loadshape..* useactual=no
+redirect Load_indexed.txt
+
+redirect monitor_feeder.txt
+redirect monitor_line.txt
+redirect MVmon.txt
+
+Set Voltagebases=[22.0, 0.420]
+calcv
+BusCoords Buscord_indexed.txt
+
+set casename=myckt
+redirect energymeter_ind.txt
+
+
+set mode=Daily number=481 stepsize=60m
+
+solve
+closedi
+
+!Plot monitor object= line15_vi_vs_time 
+ClearBusMarkers    !...Clears any previous bus markers
+AddBusMarker Bus=2114_16 code=5 color=Blue size=310
+AddBusMarker Bus=2114_15 code=5 color=Blue size=310
+AddBusMarker Bus=2114_14 code=5 color=Blue size=310
+AddBusMarker Bus=2114_13 code=5 color=Blue size=310
+AddBusMarker Bus=2114_12 code=5 color=Blue size=310
+
+
+!AddBusMarker Bus=1279 code=5 color=Red size=310
+
+Plot circuit Power Max=1000 dots=n labels=n subs=y C1=black 1ph=3
+//Show mon LINE15_VI_vs_Time 

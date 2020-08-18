@@ -1,0 +1,18 @@
+{
+    "LVcustomers":[
+        {
+            "busId":7,
+            "coded_ean":"?0063316773",
+            "connectionCapacity":95.0,
+            "deviceId":0,
+            "exclusiveNight":false,
+            "phases":[
+                1,
+                2,
+                3
+            ],
+            "yearlyNetConsumption":27930.0
+        }
+    ],
+    "solarGens":[]
+}
