@@ -737,9 +737,11 @@ if __name__ == '__main__':
         #loadProfile["Activa E"].apply(locale.atof)
         #loadProfile = loadProfile.replace(',','.')
         #loadProfile["Activa E"] = loadProfile["Activa E"].astype(float)
-        loadProfile["Activa E"].mask(loadProfile["Activa E"]>1000,np.nan,inplace=True)
+        loadProfile["Activa E"].mask(loadProfile["Activa E"]>1000,np.nan,inplace=True)  #remove outliers
+        loadProfile["Activa S"].mask(loadProfile["Activa S"] > 1000, np.nan, inplace=True)
 
     active_cons_dict = loadProfile.groupby("Referencia")["Activa E"].mean()
+    active_cons_dict += loadProfile.groupby("Referencia")["Activa S"].mean()    #include night tariff in yearly consumption
     active_cons_dict = active_cons_dict* 24*20*15 # 24 samples per day, 20 days of data available, *15 to estimate yearly (300 days) consumption
 
 #%%
