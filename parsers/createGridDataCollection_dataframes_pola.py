@@ -268,7 +268,7 @@ def addConnections(cable_dict, connections_df, customers_df, bus_list, branch_li
         branch_dict['downBusId'] = customer_conn_bus_id
         branch_dict['type'] = 'Cable'
         branch_dict['cableType'] = 'aansluitkabel'
-        branch_dict['cableLength'] = np.random.choice(20)
+        branch_dict['cableLength'] = np.nan#np.random.choice(20)
         branch_list.append(branch_dict)
 
         devices_dict = addCustomers(conn_row, customer_conn_bus_id, customers_df, devices_dict,active_cons_dict)
