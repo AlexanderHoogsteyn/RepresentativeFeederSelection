@@ -150,7 +150,7 @@ def addNextCable(cable_id, circuit_cables, connections_df, customers_df, bus_lis
     if len(circuit_cable)>0:
 
         bus_list, branch_list, devices_dict, last_cablebus_id, length_prev_cable = addConnections(circuit_cable, connections_df, customers_df, bus_list, branch_list, devices_dict, active_cons_dict,  last_cablebus_id_prev_cable, length_prev_cable)
-        print(cable_id)
+        #print(cable_id)
         next_cables = circuit_cable['next'].values[0]
         ### fix for eandis
         if isinstance(next_cables, int):
@@ -268,7 +268,7 @@ def addConnections(cable_dict, connections_df, customers_df, bus_list, branch_li
         branch_dict['downBusId'] = customer_conn_bus_id
         branch_dict['type'] = 'Cable'
         branch_dict['cableType'] = 'aansluitkabel'
-        branch_dict['cableLength'] = np.nan#np.random.choice(20)
+        branch_dict['cableLength'] = 0#np.random.choice(20)
         branch_list.append(branch_dict)
 
         devices_dict = addCustomers(conn_row, customer_conn_bus_id, customers_df, devices_dict,active_cons_dict)
@@ -339,9 +339,11 @@ def addCustomers(connection, conn_bus_id, customers_df, devices_dict,active_cons
 
         if conn_row['id'] in active_cons_dict:
             device_dict['yearlyNetConsumption'] = active_cons_dict[conn_row['id']] #added
-            print("yearlyNet Consumption for " + conn_row['id'] + " is " + str(device_dict['yearlyNetConsumption']))
         else:
-            print("No yearlyNet Consumption found for " + conn_row['id'])
+            if conn_row['connectionPhase'] == 'M':
+                device_dict['yearlyNetConsumption'] = np.random.normal(1500,250)
+            if conn_row['connectionPhase'] == 'U':
+                device_dict['yearlyNetConsumption'] = np.random.normal(5000,1000)
 
 
 
@@ -526,7 +528,7 @@ def printGridDataToFiles(bus_list, branch_list, devices_dict, circuit, trafo, ca
     circuit_name = circuit_name.replace('/','_')
     circuit_name = circuit_name.replace('>','to')
     circuit_name = circuit_name.replace('?',' ')
-    print('filename = '+ circuit_name)
+    #print('filename = '+ circuit_name)
 
     cabine_city = str(cabine["city"])
 
@@ -653,7 +655,7 @@ def makeTransformerFiles(gridFormatDict):
     trafo_dict_list = [] #list per city
     city_list = []
     for c in cabines:
-        print('cabine nr: ',c_nr)
+        #print('cabine nr: ',c_nr)
         c_nr = c_nr+1
         c_id = c["id"]
         cabine_city = str(c["city"])
@@ -728,7 +730,6 @@ if __name__ == '__main__':
     #    loadProfile=loadProfile.append(pd.read_excel(load_file))
     for m in range(1,8):
         csv = griddata_dir + "test_network/Sim_files_190128_OK_V0/GIS_data/file"+ str(m)+".csv"
-        print(csv)
         #For automatically converting excell to csv, for now I convert them manually and load the csv in a dataframe below
         #excel_dir = griddata_dir + "test_network/Sim_files_190128_OK_V0/GIS_data/"
         #excel_name = "file" + str(m)+".xlsx"
@@ -737,12 +738,14 @@ if __name__ == '__main__':
         #loadProfile["Activa E"].apply(locale.atof)
         #loadProfile = loadProfile.replace(',','.')
         #loadProfile["Activa E"] = loadProfile["Activa E"].astype(float)
-        loadProfile["Activa E"].mask(loadProfile["Activa E"]>1000,np.nan,inplace=True)  #remove outliers
-        loadProfile["Activa S"].mask(loadProfile["Activa S"] > 1000, np.nan, inplace=True)
+        loadProfile["Activa E"].mask(loadProfile["Activa E"]>50,np.nan,inplace=True)  #remove outliers
+        loadProfile["Activa S"].mask(loadProfile["Activa S"] > 50, np.nan, inplace=True)
 
     active_cons_dict = loadProfile.groupby("Referencia")["Activa E"].mean()
     active_cons_dict += loadProfile.groupby("Referencia")["Activa S"].mean()    #include night tariff in yearly consumption
+    active_cons_dict = active_cons_dict[~np.isnan(active_cons_dict)]
     active_cons_dict = active_cons_dict* 24*20*15 # 24 samples per day, 20 days of data available, *15 to estimate yearly (300 days) consumption
+
 
 #%%
     cabines_df=trafo[['CLAVE_BDI','DES']]

@@ -20,7 +20,7 @@
             "deviceId":1,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
             "yearlyNetConsumption":1381.1870410367173
         },
@@ -42,7 +42,7 @@
             "deviceId":3,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
             "yearlyNetConsumption":347.8799999999999
         },
@@ -53,7 +53,7 @@
             "deviceId":4,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
             "yearlyNetConsumption":258.73596673596705
         },
@@ -64,7 +64,7 @@
             "deviceId":5,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
             "yearlyNetConsumption":2963.1163179916293
         }
