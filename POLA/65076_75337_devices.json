@@ -1,0 +1,33 @@
+{
+    "LVcustomers":[
+        {
+            "busId":5,
+            "coded_ean":"ZIV0040637053",
+            "connectionCapacity":17.32,
+            "deviceId":0,
+            "exclusiveNight":false,
+            "phases":[
+                1,
+                2,
+                3
+            ],
+            "yearlyNetConsumption":4758.399555110643,
+            "yearlyNetReactiveConsumption":406.7177311798858
+        },
+        {
+            "busId":12,
+            "coded_ean":"ZIV0047741053",
+            "connectionCapacity":27.71,
+            "deviceId":1,
+            "exclusiveNight":false,
+            "phases":[
+                1,
+                2,
+                3
+            ],
+            "yearlyNetConsumption":4665.280338177141,
+            "yearlyNetReactiveConsumption":450.8581103303645
+        }
+    ],
+    "solarGens":[]
+}

@@ -25,7 +25,7 @@ from itertools import islice
 #griddata_dir += os.sep
 
 #griddata_dir= 'C:/Users/karpan/Documents/grid/'
-griddata_dir= "C:/Users\AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/test_network"
+griddata_dir= "C:/Users/AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/"
 #%%
 def loadGridFile(jsonFileNameList):
 
@@ -127,7 +127,7 @@ def parseGridData(gridFormatDict):
 #                     first_cable = circuit_cables[circuit_cables["prev"]==circuit_cables['id']] ##don't know if this works
 
                 if len(first_cable)>0:
-                    bus_list, branch_list, devices_dict = addNextCable(first_cable['id'].values[0], circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict)
+                    bus_list, branch_list, devices_dict = addNextCable(first_cable['id'].values[0], circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict,active_cons_dict)
                 else:
                     print('no cable present with prev == [] for circuitId: ', circuit_id)
                 #print(bus_list)
@@ -142,15 +142,15 @@ def parseGridData(gridFormatDict):
 
 
 
-def addNextCable(cable_id, circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict, last_cablebus_id_prev_cable=0, length_prev_cable=0):
+def addNextCable(cable_id, circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict,active_cons_dict, last_cablebus_id_prev_cable=0, length_prev_cable=0):
 
     #circuit_cable = next((cable for cable in circuit_cables if cable["id"] == cable_id), False)
     circuit_cable = circuit_cables[circuit_cables['id']==cable_id]
 
     if len(circuit_cable)>0:
 
-        bus_list, branch_list, devices_dict, last_cablebus_id, length_prev_cable = addConnections(circuit_cable, connections_df, customers_df, bus_list, branch_list, devices_dict, last_cablebus_id_prev_cable, length_prev_cable)
-        print(cable_id)
+        bus_list, branch_list, devices_dict, last_cablebus_id, length_prev_cable = addConnections(circuit_cable, connections_df, customers_df, bus_list, branch_list, devices_dict, active_cons_dict,  last_cablebus_id_prev_cable, length_prev_cable)
+        #print(cable_id)
         next_cables = circuit_cable['next'].values[0]
         ### fix for eandis
         if isinstance(next_cables, int):
@@ -160,13 +160,13 @@ def addNextCable(cable_id, circuit_cables, connections_df, customers_df, bus_lis
         if isinstance(next_cables, list):
             if len(next_cables) > 0:
                 for next_cable_id in next_cables:
-                    bus_list, branch_list, devices_dict = addNextCable(next_cable_id, circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict, last_cablebus_id, length_prev_cable)
+                    bus_list, branch_list, devices_dict = addNextCable(next_cable_id, circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict, active_cons_dict, last_cablebus_id, length_prev_cable)
 
             else:
                 return bus_list, branch_list, devices_dict
         if isinstance(next_cables, int):
             next_cable_id = next_cables
-            bus_list, branch_list, devices_dict = addNextCable(next_cable_id, circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict, last_cablebus_id,length_prev_cable)
+            bus_list, branch_list, devices_dict = addNextCable(next_cable_id, circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict,active_cons_dict, last_cablebus_id,length_prev_cable)
 
 #                             circuit_cable = next((cable for cable in circuit_cables if cable["id"] == next_cable_id), False)
 #                             if circuit_cable:
@@ -183,7 +183,7 @@ def addNextCable(cable_id, circuit_cables, connections_df, customers_df, bus_lis
     return bus_list, branch_list, devices_dict
 
 
-def addConnections(cable_dict, connections_df, customers_df, bus_list, branch_list, devices_dict, last_cablebus_id_prev_cable, length_prev_cable):
+def addConnections(cable_dict, connections_df, customers_df, bus_list, branch_list, devices_dict, active_cons_dict, last_cablebus_id_prev_cable, length_prev_cable):
     cable_id = cable_dict['id'].values[0]
     cable_type = cable_dict['cableType'].values[0]
     cable_length = cable_dict['length'].values[0]
@@ -268,10 +268,10 @@ def addConnections(cable_dict, connections_df, customers_df, bus_list, branch_li
         branch_dict['downBusId'] = customer_conn_bus_id
         branch_dict['type'] = 'Cable'
         branch_dict['cableType'] = 'aansluitkabel'
-        branch_dict['cableLength'] = np.random.choice(20)
+        branch_dict['cableLength'] = 0#np.random.choice(20)
         branch_list.append(branch_dict)
 
-        devices_dict = addCustomers(conn_row, customer_conn_bus_id, customers_df, devices_dict)
+        devices_dict = addCustomers(conn_row, customer_conn_bus_id, customers_df, devices_dict,active_cons_dict)
 
     ## the last part of the cable (after the last connection)
     last_bus_id = bus_list[-1]['busId']
@@ -307,7 +307,7 @@ def addConnections(cable_dict, connections_df, customers_df, bus_list, branch_li
 
     return bus_list, branch_list, devices_dict, last_cablebus_id, cable_length
 
-def addCustomers(connection, conn_bus_id, customers_df, devices_dict):
+def addCustomers(connection, conn_bus_id, customers_df, devices_dict,active_cons_dict):
     connection_id = connection['id']
     if 'connectionId' in customers_df.columns:
         conn_customers = customers_df[customers_df['connectionId']==connection_id] # [cust for cust in customers if cust['connectionId'] == connection_id]
@@ -337,10 +337,24 @@ def addCustomers(connection, conn_bus_id, customers_df, devices_dict):
         device_dict['busId'] = conn_bus_id
 #        device_dict['statSector'] = connection['statSector']
 
-        device_dict['yearlyNetConsumption'] = (np.random.choice(1000)+1)*conn_row['periodP1'] #added
-        if not device_dict['yearlyNetConsumption']:
-            #print()
-            pass
+        if conn_row['id'] in active_cons_dict:
+            device_dict['yearlyNetConsumption'] = active_cons_dict[conn_row['id']][0] + active_cons_dict[conn_row['id']][0] #add night tariff as well
+            device_dict['yearlyNetReactiveConsumption'] = active_cons_dict[conn_row['id']][2]
+            if device_dict['yearlyNetConsumption'] == np.nan or device_dict['yearlyNetReactiveConsumption'] == np.nan:
+                if conn_row['connectionPhase'] == 'M':
+                    device_dict['yearlyNetConsumption'] = np.random.normal(1500, 250)
+                    device_dict['yearlyNetReactiveConsumption'] = np.random.normal(150, 25)
+                if conn_row['connectionPhase'] == 'U':
+                    device_dict['yearlyNetConsumption'] = np.random.normal(5000, 1000)
+                    device_dict['yearlyNetReactiveConsumption'] = np.random.normal(500, 100)
+        else:
+            if conn_row['connectionPhase'] == 'M':
+                device_dict['yearlyNetConsumption'] = np.random.normal(1500,250)
+                device_dict['yearlyNetReactiveConsumption'] = np.random.normal(150, 25)
+            if conn_row['connectionPhase'] == 'U':
+                device_dict['yearlyNetConsumption'] = np.random.normal(5000,1000)
+                device_dict['yearlyNetReactiveConsumption'] = np.random.normal(500, 100)
+
 
 
         if 'periodP1' in conn_customers.columns:
@@ -524,7 +538,7 @@ def printGridDataToFiles(bus_list, branch_list, devices_dict, circuit, trafo, ca
     circuit_name = circuit_name.replace('/','_')
     circuit_name = circuit_name.replace('>','to')
     circuit_name = circuit_name.replace('?',' ')
-    print('filename = '+ circuit_name)
+    #print('filename = '+ circuit_name)
 
     cabine_city = str(cabine["city"])
 
@@ -651,7 +665,7 @@ def makeTransformerFiles(gridFormatDict):
     trafo_dict_list = [] #list per city
     city_list = []
     for c in cabines:
-        print('cabine nr: ',c_nr)
+        #print('cabine nr: ',c_nr)
         c_nr = c_nr+1
         c_id = c["id"]
         cabine_city = str(c["city"])
@@ -707,7 +721,7 @@ if __name__ == '__main__':
 #%%
 
     #dir_n="U:/PhD/probablistic_pf/test_network/Sim_files_190128_OK_V0/GIS_data/master.xlsx"
-    dir_n= griddata_dir + "/Sim_files_190128_OK_V0/GIS_data/master.xlsx"
+    dir_n= griddata_dir + "test_network/Sim_files_190128_OK_V0/GIS_data/master.xlsx"
     trafo=pd.read_excel(dir_n, sheet_name='CT - TRAFO')
     linea=pd.read_excel(dir_n, sheet_name='Linea BT')
     segment=pd.read_excel(dir_n, sheet_name='Segmento BT')
@@ -715,7 +729,7 @@ if __name__ == '__main__':
     fuse=pd.read_excel(dir_n, sheet_name='Fusible')
 
     #load_n="U:/PhD/probablistic_pf/test_network/Sim_files_190128_OK_V0/GIS_data/load_det.xlsx"
-    load_n= griddata_dir + "/Sim_files_190128_OK_V0/GIS_data/load_det.xlsx"
+    load_n= griddata_dir + "test_network/Sim_files_190128_OK_V0/GIS_data/load_det.xlsx"
     load_details=pd.read_excel(load_n, sheet_name='Load')
 #%% load profile and phase
 #TO Do for Alexander commented for now as the code below is quite time consuming and not complete
@@ -724,12 +738,27 @@ if __name__ == '__main__':
     #    #load_file = "U:/PhD/probablistic_pf/test_network/Sim_files_190128_OK_V0/GIS_data/file"+ str(m)+".xlsx"
     #    load_file = griddata_dir + "/Sim_files_190128_OK_V0/GIS_data/file"+ str(m)+".xlsx"
     #    loadProfile=loadProfile.append(pd.read_excel(load_file))
-    for m in range(1,3):
-        csv = griddata_dir + "/Sim_files_190128_OK_V0/GIS_data/file"+ str(m)+".csv"
-        print(csv)
-        #call(['cscript.exe', 'C:\\Users\\rsignell\\ExcelToCsv.vbs', excel, csv, sheet])
-        loadProfile= loadProfile.append(pd.read_csv(csv,sep=";"))
-    print(loadProfile.head())
+    for m in range(1,8):
+        csv = griddata_dir + "test_network/Sim_files_190128_OK_V0/GIS_data/file"+ str(m)+".csv"
+        #For automatically converting excell to csv, for now I convert them manually and load the csv in a dataframe below
+        #excel_dir = griddata_dir + "test_network/Sim_files_190128_OK_V0/GIS_data/"
+        #excel_name = "file" + str(m)+".xlsx"
+        #subprocess.call(['cscript.exe', griddata_dir +"parsers/ExcelToCsv.vbs", excel_dir + excel_name , csv, m])
+        loadProfile= loadProfile.append(pd.read_csv(csv,sep=";",skipinitialspace=True, decimal=',', thousands=' '))
+        #loadProfile["Activa E"].apply(locale.atof)
+        #loadProfile = loadProfile.replace(',','.')
+        #loadProfile["Activa E"] = loadProfile["Activa E"].astype(float)
+        loadProfile["Activa E"].mask(loadProfile["Activa E"]>200,np.nan,inplace=True)  #remove outliers
+        loadProfile["Activa S"].mask(loadProfile["Activa S"] > 200, np.nan, inplace=True)
+        loadProfile["Reactiva1"].mask(loadProfile["Reactiva1"] > 200, np.nan, inplace=True)  # remove outliers
+        loadProfile["Reactiva4"].mask(loadProfile["Reactiva4"] > 200, np.nan, inplace=True)
+
+    active_cons_dict = loadProfile.groupby("Referencia")[["Activa E","Activa S","Reactiva1"]].mean()
+    #active_cons_dict += loadProfile.groupby("Referencia")["Activa S"].mean()    #include night tariff in yearly consumption
+
+    #active_cons_dict = active_cons_dict[~np.isnan(active_cons_dict)]
+    active_cons_dict = active_cons_dict* 24*20*15 # 24 samples per day, 20 days of data available, *15 to estimate yearly (300 days) consumption
+
 
 #%%
     cabines_df=trafo[['CLAVE_BDI','DES']]
@@ -903,7 +932,7 @@ if __name__ == '__main__':
 #                     first_cable = circuit_cables[circuit_cables["prev"]==circuit_cables['id']] ##don't know if this works
 
                 if len(first_cable)>0:
-                    bus_list, branch_list, devices_dict = addNextCable(first_cable['id'].values[0], circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict)
+                    bus_list, branch_list, devices_dict = addNextCable(first_cable['id'].values[0], circuit_cables, connections_df, customers_df, bus_list, branch_list, devices_dict,active_cons_dict)
                 else:
                     print('no cable present with prev == [] for circuitId: ', circuit_id)
                 #print(bus_list)
