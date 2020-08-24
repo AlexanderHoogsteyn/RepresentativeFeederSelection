@@ -21,14 +21,15 @@ class FeatureSet:
 
     """
     def __init__(self,path='C:/Users/AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/POLA',
-                 include_n_customer=True, include_total_length=True, include_total_cons=False, include_n_PV=False, include_total_line_impedance=False):
+                 include_n_customer=True, include_total_length=True,include_main_path=False, include_total_cons=False, include_total_reactive_cons=False, include_n_PV=False,
+                 include_total_line_impedance=False):
         """
         Initialize
         """
         features = []
         self._path = path
-        list = ["Number of customers","Total yearly consumption (kWh)","Number of PV installations","Total conductor length (km)","Total line impedance (Ohm)"]
-        includes = [include_n_customer, include_total_cons, include_n_PV, include_total_length, include_total_line_impedance]
+        list = ["Number of customers","Total yearly consumption (kWh)","Total yearly reactive consumption (kWh)","Number of PV installations","Total conductor length (km)","Main path length (km)","Total line impedance (Ohm)"]
+        includes = [include_n_customer, include_total_cons, include_total_reactive_cons, include_n_PV, include_total_length,include_main_path, include_total_line_impedance]
         self._feature_list = [list[i] for i in range(len(list)) if includes[i]]
         #cycle through all the json files
         for file in glob.glob(os.path.join(self._path, '*configuration.json')):
@@ -40,7 +41,7 @@ class FeatureSet:
             if include_n_customer == True:
                 row += [config_data['gridConfig']['totalNrOfEANS']]
 
-            if include_total_cons == True or include_n_PV == True:
+            if include_total_cons == True or include_n_PV == True or include_total_reactive_cons == True:
                 with open(os.path.join(os.path.dirname(self._path), devices_path)) as devices_file:
                     devices_data = json.load(devices_file)
                     if include_total_cons == True:
@@ -52,10 +53,19 @@ class FeatureSet:
                             except TypeError:
                                 print("yearlyNetConsumption contains NoneType")
                         row += [total_cons]
+                    if include_total_reactive_cons == True:
+                        total_reactive_cons = 0
+                        for device in devices_data['LVcustomers']:
+                            reactive_cons = device.get('yearlyNetReactiveConsumption')
+                            try:
+                                total_reactive_cons += float(reactive_cons)
+                            except TypeError:
+                                print("yearlyNetReactiveConsumption contains NoneType")
+                        row += [total_reactive_cons]
                     if include_n_PV == True:
                         row += [len(devices_data["solarGens"])]
 
-            if include_total_length == True or include_total_line_impedance ==True:
+            if include_total_length == True or include_main_path == True or include_total_line_impedance == True:
                 with open(os.path.join(os.path.dirname(self._path), branches_path)) as branches_file:
                     branches_data = json.load(branches_file)
                     if include_total_length == True:
@@ -67,6 +77,8 @@ class FeatureSet:
                             except TypeError:
                                 print("cableLength contains NoneType")
                         row += [total_length]
+                    if include_main_path == True:
+                        row += [longest_path(0,branches_data)]
                     if include_total_line_impedance == True:
                         raise NotImplementedError
 
@@ -88,6 +100,9 @@ class FeatureSet:
         return self._feature_list
 
     def get_feature(self,i):
+        if isinstance(i,str):
+            ind = self.get_feature_list().index(i)
+            return self._features[:,ind]
         return self._features[:,i]
 
     def set_feature(self,i,new_feature):
@@ -164,6 +179,17 @@ class FeatureSet:
 
         return Cluster(np.array(GaussianMixture(n_components=n_clusters,n_init=n_repeats).fit_predict(data)), 'Gaussian mixture model', normalized,n_repeats)
 
+def longest_path(busId,branches_data):
+    longest_found = 0
+    for branch in branches_data:
+        if branch.get("upBusId") == busId:
+            found = branch.get("cableLength") + longest_path(branch.get("downBusId"),branches_data)
+            if found > longest_found:
+                longest_found = found
+    return longest_found
+
+
+
 class Cluster:
     def __init__(self,clusters,algorithm,normalized=False,n_repeats=1,criterion='global_silhouette'):
         self._clusters = clusters
@@ -204,14 +230,27 @@ class Cluster:
         return self._n_clusters
 
 
-def plot_2D_clusters(FeatureSet,Cluster,):
-    features = FeatureSet.get_features()
+def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
     axis_labels = FeatureSet.get_feature_list()
     cluster_labels = Cluster.get_clusters()
     plt.figure(figsize=(12, 10))
-    plt.scatter(x=features[:,0],y=features[:,1], c=cluster_labels,alpha=0.85)
-    plt.xlabel(axis_labels[0])
-    plt.ylabel(axis_labels[1])
+    if x_axis == None:
+        x = FeatureSet.get_feature(0)
+        x_axis = axis_labels[0]
+    elif x_axis in axis_labels:
+        x = FeatureSet.get_feature(x_axis)
+    else:
+        raise AttributeError
+    if y_axis == None:
+        y = FeatureSet.get_feature(1)
+        y_axis = axis_labels[1]
+    elif y_axis in axis_labels:
+        y = FeatureSet.get_feature(y_axis)
+    else:
+        raise AttributeError
+    plt.scatter(x,y, c=cluster_labels,alpha=0.85)
+    plt.xlabel(x_axis)
+    plt.ylabel(y_axis)
     plt.title(Cluster.get_algorithm() +" with n_clusters = %d" % Cluster.get_n_clusters() + Cluster.get_repeats() + ', ' + Cluster.get_normalisation())
     plt.show()
 

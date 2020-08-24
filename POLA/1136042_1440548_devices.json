@@ -11,7 +11,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":3710.3866684441064
+            "yearlyNetConsumption":3619.613895502416,
+            "yearlyNetReactiveConsumption":461.2879935387967
         },
         {
             "busId":6,
@@ -24,7 +25,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":3835.3805981363907
+            "yearlyNetConsumption":4917.289694954238,
+            "yearlyNetReactiveConsumption":279.08862078116135
         },
         {
             "busId":16,
@@ -33,9 +35,10 @@
             "deviceId":2,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1293.7577854671292
+            "yearlyNetConsumption":1521.6819364180456,
+            "yearlyNetReactiveConsumption":117.74256249352177
         }
     ],
     "solarGens":[]

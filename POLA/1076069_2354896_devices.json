@@ -7,9 +7,10 @@
             "deviceId":0,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":12958.153846153842
+            "yearlyNetConsumption":1406.0711900874367,
+            "yearlyNetReactiveConsumption":191.05394260888178
         }
     ],
     "solarGens":[]

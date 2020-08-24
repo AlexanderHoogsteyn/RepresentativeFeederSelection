@@ -338,12 +338,22 @@ def addCustomers(connection, conn_bus_id, customers_df, devices_dict,active_cons
 #        device_dict['statSector'] = connection['statSector']
 
         if conn_row['id'] in active_cons_dict:
-            device_dict['yearlyNetConsumption'] = active_cons_dict[conn_row['id']] #added
+            device_dict['yearlyNetConsumption'] = active_cons_dict[conn_row['id']][0] + active_cons_dict[conn_row['id']][0] #add night tariff as well
+            device_dict['yearlyNetReactiveConsumption'] = active_cons_dict[conn_row['id']][2]
+            if device_dict['yearlyNetConsumption'] == np.nan or device_dict['yearlyNetReactiveConsumption'] == np.nan:
+                if conn_row['connectionPhase'] == 'M':
+                    device_dict['yearlyNetConsumption'] = np.random.normal(1500, 250)
+                    device_dict['yearlyNetReactiveConsumption'] = np.random.normal(150, 25)
+                if conn_row['connectionPhase'] == 'U':
+                    device_dict['yearlyNetConsumption'] = np.random.normal(5000, 1000)
+                    device_dict['yearlyNetReactiveConsumption'] = np.random.normal(500, 100)
         else:
             if conn_row['connectionPhase'] == 'M':
                 device_dict['yearlyNetConsumption'] = np.random.normal(1500,250)
+                device_dict['yearlyNetReactiveConsumption'] = np.random.normal(150, 25)
             if conn_row['connectionPhase'] == 'U':
                 device_dict['yearlyNetConsumption'] = np.random.normal(5000,1000)
+                device_dict['yearlyNetReactiveConsumption'] = np.random.normal(500, 100)
 
 
 
@@ -738,12 +748,15 @@ if __name__ == '__main__':
         #loadProfile["Activa E"].apply(locale.atof)
         #loadProfile = loadProfile.replace(',','.')
         #loadProfile["Activa E"] = loadProfile["Activa E"].astype(float)
-        loadProfile["Activa E"].mask(loadProfile["Activa E"]>50,np.nan,inplace=True)  #remove outliers
-        loadProfile["Activa S"].mask(loadProfile["Activa S"] > 50, np.nan, inplace=True)
+        loadProfile["Activa E"].mask(loadProfile["Activa E"]>200,np.nan,inplace=True)  #remove outliers
+        loadProfile["Activa S"].mask(loadProfile["Activa S"] > 200, np.nan, inplace=True)
+        loadProfile["Reactiva1"].mask(loadProfile["Reactiva1"] > 200, np.nan, inplace=True)  # remove outliers
+        loadProfile["Reactiva4"].mask(loadProfile["Reactiva4"] > 200, np.nan, inplace=True)
 
-    active_cons_dict = loadProfile.groupby("Referencia")["Activa E"].mean()
-    active_cons_dict += loadProfile.groupby("Referencia")["Activa S"].mean()    #include night tariff in yearly consumption
-    active_cons_dict = active_cons_dict[~np.isnan(active_cons_dict)]
+    active_cons_dict = loadProfile.groupby("Referencia")[["Activa E","Activa S","Reactiva1"]].mean()
+    #active_cons_dict += loadProfile.groupby("Referencia")["Activa S"].mean()    #include night tariff in yearly consumption
+
+    #active_cons_dict = active_cons_dict[~np.isnan(active_cons_dict)]
     active_cons_dict = active_cons_dict* 24*20*15 # 24 samples per day, 20 days of data available, *15 to estimate yearly (300 days) consumption
 
 
