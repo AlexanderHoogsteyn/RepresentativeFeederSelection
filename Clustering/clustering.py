@@ -41,7 +41,7 @@ class FeatureSet:
             if include_n_customer == True:
                 row += [config_data['gridConfig']['totalNrOfEANS']]
 
-            if include_total_cons == True or include_n_PV == True or include_total_reactive_cons == True:
+            if include_total_cons == True or include_n_PV == True or include_total_reactive_cons == True or include_total_line_impedance == True:
                 with open(os.path.join(os.path.dirname(self._path), devices_path)) as devices_file:
                     devices_data = json.load(devices_file)
                     if include_total_cons == True:
@@ -80,7 +80,7 @@ class FeatureSet:
                     if include_main_path == True:
                         row += [longest_path(0,branches_data)]
                     if include_total_line_impedance == True:
-                        raise NotImplementedError
+                        row += [total_path_lenght(0,branches_data,devices_data)[0]]
 
             features.append(row)
             self._IDs = [i[0] for i in features]
@@ -179,7 +179,7 @@ class FeatureSet:
 
         return Cluster(np.array(GaussianMixture(n_components=n_clusters,n_init=n_repeats).fit_predict(data)), 'Gaussian mixture model', normalized,n_repeats)
 
-def longest_path(busId,branches_data):
+def longest_path(busId,branches_data): #Could be faster if you 'pop' the branches such that they are not searched again
     longest_found = 0
     for branch in branches_data:
         if branch.get("upBusId") == busId:
@@ -187,6 +187,17 @@ def longest_path(busId,branches_data):
             if found > longest_found:
                 longest_found = found
     return longest_found
+
+def total_path_lenght(busId,branches_data,devices_data): #Could be faster if you 'pop' the branches such that they are not searched again
+    path_length = 0
+    n_devices = 0
+    for branch in branches_data:
+        if branch.get("upBusId") == busId:
+            subpath_length, n_subpath_devices = total_path_lenght(branch.get("downBusId"),branches_data,devices_data)
+            path_length += subpath_length + branch.get("cableLength")*n_subpath_devices
+            n_devices += n_subpath_devices
+    n_devices += sum(1 for i in devices_data["LVcustomers"] if i['busId'] == busId)
+    return path_length, n_devices
 
 
 
