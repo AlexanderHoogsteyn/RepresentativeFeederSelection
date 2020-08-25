@@ -1,13 +1,14 @@
 from clustering import *
 
 
+
 #Number of customers & Total coductor length
 f = FeatureSet()
 assert np.size(f.get_features(),1) == 2
 assert np.size(f.get_features(),0) == 160
 assert not np.isnan(f.get_features()).any()
 assert f.get_feature("Number of customers").all() == f.get_feature(0).all()
-plot_2D_clusters(f,f.hierarchal_clustering())
+#plot_2D_clusters(f,f.hierarchal_clustering())
 #silhouette_analysis(f,f.hierarchal_clustering(normalized=True))
 
 #Number of customers & Total yearly consumption
@@ -69,18 +70,19 @@ assert k.get_feature("Main path length (km)").all() <= k.get_feature(1).all()
 assert k.get_feature("Main path length (km)").all() == k.get_feature(2).all()
 
 #Impedance
-l = FeatureSet(include_total_line_impedance=True)
-assert l.get_feature_list() == ["Number of customers","Total conductor length (km)","Total line impedance (Ohm)"]
-assert np.size(l.get_features(),1) == 3
+l = FeatureSet(include_main_path=True, include_total_impedance=True)
+assert l.get_feature_list() == ["Number of customers","Total conductor length (km)","Main path length (km)","Total line impedance (Ohm)"]
+assert np.size(l.get_features(),1) == 4
 assert np.size(l.get_features(),0) == 160
 assert not np.isnan(l.get_features()).any()
 assert np.array(l.get_IDs())[l.get_feature(2)==0].all() == np.array([1246503, 1246507, 1464991, 1464997, 1465008, 1440552, 1450257,
        1931561, 1866127,   77873, 2366496, 2366498, 1405071]).all() #Cases with empty LVcustomer
+#plot_2D_clusters(l, l.gaussian_mixture_model(n_repeats=50),x_axis="Main path length (km)",y_axis="Total line impedance (Ohm)")
 
 
 #DEMO
 
-object = FeatureSet(include_number_customers=True, include_total_length=True, include_main_path=True)
+object = FeatureSet(include_n_customer=True, include_total_length=True, include_main_path=True,include_total_impedance=True)
 
 print(object.get_features())
 print(object.get_feature(0))
@@ -95,6 +97,6 @@ cluster_4 = object.gaussian_mixture_model(n_repeats=50)
 print(cluster_1.get_clusters())
 
 plot_2D_clusters(object,cluster_1)
-plot_2D_clusters(object,cluster_2)
+plot_2D_clusters(object,cluster_2,x_axis="Main path length (km)",y_axis="Total line impedance (Ohm)") #what unit is "cablelength"?
 silhouette_analysis(object,cluster_3)
 silhouette_analysis(object,cluster_4)
