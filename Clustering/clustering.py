@@ -20,16 +20,19 @@ class FeatureSet:
     A class of ...
 
     """
-    def __init__(self,path='C:/Users/AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/POLA',
-                 include_n_customer=True, include_total_length=True,include_main_path=False, include_total_cons=False, include_total_reactive_cons=False, include_n_PV=False,
-                 include_total_line_impedance=False):
+    def __init__(self, path='C:/Users/AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/POLA',
+                 include_n_customer=True, include_total_length=True, include_main_path=False, include_total_cons=False, \
+                 include_total_reactive_cons=False, include_n_PV=False, include_total_impedance=False, \
+                 include_average_length=False, include_average_impedance=False):
         """
         Initialize
         """
         features = []
         self._path = path
-        list = ["Number of customers","Total yearly consumption (kWh)","Total yearly reactive consumption (kWh)","Number of PV installations","Total conductor length (km)","Main path length (km)","Total line impedance (Ohm)"]
-        includes = [include_n_customer, include_total_cons, include_total_reactive_cons, include_n_PV, include_total_length,include_main_path, include_total_line_impedance]
+        list = ["Number of customers","Total yearly consumption (kWh)","Total yearly reactive consumption (kWh)","Number of PV installations", \
+                "Total conductor length (km)","Main path length (km)","Average length to customer (km)", "Total line impedance (Ohm)","Average path impedance (Ohm)"]
+        includes = [include_n_customer, include_total_cons, include_total_reactive_cons, include_n_PV, \
+                    include_total_length, include_main_path, include_average_length, include_total_impedance, include_average_impedance]
         self._feature_list = [list[i] for i in range(len(list)) if includes[i]]
         #cycle through all the json files
         for file in glob.glob(os.path.join(self._path, '*configuration.json')):
@@ -41,7 +44,8 @@ class FeatureSet:
             if include_n_customer == True:
                 row += [config_data['gridConfig']['totalNrOfEANS']]
 
-            if include_total_cons == True or include_n_PV == True or include_total_reactive_cons == True:
+            if include_total_cons == True or include_n_PV == True or include_total_reactive_cons == True or \
+                    include_average_length == True or include_total_impedance == True or include_average_impedance == True:
                 with open(os.path.join(os.path.dirname(self._path), devices_path)) as devices_file:
                     devices_data = json.load(devices_file)
                     if include_total_cons == True:
@@ -65,7 +69,8 @@ class FeatureSet:
                     if include_n_PV == True:
                         row += [len(devices_data["solarGens"])]
 
-            if include_total_length == True or include_main_path == True or include_total_line_impedance == True:
+            if include_total_length == True or include_main_path == True or include_average_length == True or \
+                    include_total_impedance == True or include_average_impedance == True:
                 with open(os.path.join(os.path.dirname(self._path), branches_path)) as branches_file:
                     branches_data = json.load(branches_file)
                     if include_total_length == True:
@@ -79,8 +84,20 @@ class FeatureSet:
                         row += [total_length]
                     if include_main_path == True:
                         row += [longest_path(0,branches_data)]
-                    if include_total_line_impedance == True:
-                        raise NotImplementedError
+                    if include_average_length == True:
+                        total_length, n_customers = total_path_length(0, branches_data, devices_data)
+                        try:
+                            row += [total_length/n_customers]
+                        except ZeroDivisionError:
+                            row += [0]
+                    if include_total_impedance == True:
+                        row += [total_path_impedance(0,branches_data,devices_data)[0]]
+                    if include_average_impedance == True:
+                        total_impedance, n_customers = total_path_impedance(0, branches_data, devices_data)
+                        try:
+                            row += [total_impedance / n_customers]
+                        except ZeroDivisionError:
+                            row += [0]
 
             features.append(row)
             self._IDs = [i[0] for i in features]
@@ -179,7 +196,7 @@ class FeatureSet:
 
         return Cluster(np.array(GaussianMixture(n_components=n_clusters,n_init=n_repeats).fit_predict(data)), 'Gaussian mixture model', normalized,n_repeats)
 
-def longest_path(busId,branches_data):
+def longest_path(busId,branches_data): #Could be faster if you 'pop' the branches such that they are not searched again
     longest_found = 0
     for branch in branches_data:
         if branch.get("upBusId") == busId:
@@ -188,7 +205,46 @@ def longest_path(busId,branches_data):
                 longest_found = found
     return longest_found
 
+def total_path_length(busId,branches_data,devices_data): #Could be faster if you 'pop' the branches such that they are not searched again
+    path_length = 0
+    n_devices = 0
+    for branch in branches_data:
+        if branch.get("upBusId") == busId:
+            subpath_length, n_subpath_devices = total_path_length(branch.get("downBusId"),branches_data,devices_data)
+            path_length += subpath_length + branch.get("cableLength")*n_subpath_devices
+            n_devices += n_subpath_devices
+    n_devices += sum(1 for i in devices_data["LVcustomers"] if i['busId'] == busId)
+    return path_length, n_devices
 
+def total_path_impedance(busId,branches_data,devices_data): #Could be faster if you 'pop' the branches such that they are not searched again
+    path_impedance = 0
+    n_devices = 0
+    for branch in branches_data:
+        if branch.get("upBusId") == busId:
+            impedance = lookup_impedance(branch.get("cableType"))
+            subpath_length, n_subpath_devices = total_path_length(branch.get("downBusId"),branches_data,devices_data)
+            path_impedance += subpath_length + branch.get("cableLength")*impedance*n_subpath_devices
+            n_devices += n_subpath_devices
+    n_devices += sum(1 for i in devices_data["LVcustomers"] if i['busId'] == busId)
+    return path_impedance, n_devices
+
+def lookup_impedance(cable_type): #Includes DC resistance only, supposes all loads are single phase connected
+    lookup_table = {"BT - RV 0,6/1 KV 3(1*150 KAL) + 1*95 KAL" : 0.124,
+                    "BT - RV 0,6/1 KV 4*95 KAL": 0.193,
+                    "aansluitkabel" : 0.727,
+                    "BT - RZ 0,6/1 KV 4*16 AL" : 1.15,
+                    "BT - RZ 0,6/1 KV 3*150 AL/95 ALM" : 0.124,
+                    "BT - RZ 0,6/1 KV 3*150 AL/80 ALM": 0.124,
+                    "BT - RZ 0,6/1 KV 3*50 AL/54,6 ALM" : 0.387,
+                    "BT - RV 0,6/1 KV 3(1*240 KAL) + 1*150 KAL" : 0.0754,
+                    "BT - RZ 0,6/1 KV 3*25 AL/54,6 ALM" : 0.727,
+                    "BT - RZ 0,6/1 KV 3*95 AL/54,6 ALM": 0.193
+                    }
+    if cable_type in lookup_table:
+        return lookup_table[cable_type]
+    else:
+        print(cable_type)
+        return 0.124
 
 class Cluster:
     def __init__(self,clusters,algorithm,normalized=False,n_repeats=1,criterion='global_silhouette'):

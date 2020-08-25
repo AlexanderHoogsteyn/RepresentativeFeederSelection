@@ -1,5 +1,7 @@
 from clustering import *
 
+
+
 #Number of customers & Total coductor length
 f = FeatureSet()
 assert np.size(f.get_features(),1) == 2
@@ -7,7 +9,7 @@ assert np.size(f.get_features(),0) == 160
 assert not np.isnan(f.get_features()).any()
 assert f.get_feature("Number of customers").all() == f.get_feature(0).all()
 #plot_2D_clusters(f,f.hierarchal_clustering())
-silhouette_analysis(f,f.hierarchal_clustering(normalized=True))
+#silhouette_analysis(f,f.hierarchal_clustering(normalized=True))
 
 #Number of customers & Total yearly consumption
 h = FeatureSet(include_total_cons=True, include_total_length=False)
@@ -66,3 +68,35 @@ assert np.size(k.get_features(),0) == 160
 assert not np.isnan(k.get_features()).any()
 assert k.get_feature("Main path length (km)").all() <= k.get_feature(1).all()
 assert k.get_feature("Main path length (km)").all() == k.get_feature(2).all()
+
+#Impedance
+l = FeatureSet(include_main_path=True, include_total_impedance=True)
+assert l.get_feature_list() == ["Number of customers","Total conductor length (km)","Main path length (km)","Total line impedance (Ohm)"]
+assert np.size(l.get_features(),1) == 4
+assert np.size(l.get_features(),0) == 160
+assert not np.isnan(l.get_features()).any()
+assert np.array(l.get_IDs())[l.get_feature(2)==0].all() == np.array([1246503, 1246507, 1464991, 1464997, 1465008, 1440552, 1450257,
+       1931561, 1866127,   77873, 2366496, 2366498, 1405071]).all() #Cases with empty LVcustomer
+#plot_2D_clusters(l, l.gaussian_mixture_model(n_repeats=50),x_axis="Main path length (km)",y_axis="Total line impedance (Ohm)")
+
+
+#DEMO
+
+object = FeatureSet(include_n_customer=True, include_total_length=True, include_main_path=True,include_total_impedance=True)
+
+print(object.get_features())
+print(object.get_feature(0))
+print(object.get_feature("Number of customers"))
+print(object.get_IDs())
+
+cluster_1 = object.hierarchal_clustering()  #Not stochastic? So no point in repeating
+cluster_2 = object.k_means_clustering(n_clusters=9,n_repeats=50)
+cluster_3 = object.k_medoids_clustering(n_repeats=10,criterion='global_silhouette') #you can choose average or global silhouette
+cluster_4 = object.gaussian_mixture_model(n_repeats=50)
+
+print(cluster_1.get_clusters())
+
+plot_2D_clusters(object,cluster_1)
+plot_2D_clusters(object,cluster_2,x_axis="Main path length (km)",y_axis="Total line impedance (Ohm)") #what unit is "cablelength"?
+silhouette_analysis(object,cluster_3)
+silhouette_analysis(object,cluster_4)
