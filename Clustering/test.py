@@ -1,5 +1,5 @@
 from clustering import *
-
+import pickle
 
 
 #Number of customers & Total coductor length
@@ -12,7 +12,7 @@ assert f.get_feature("Number of customers").all() == f.get_feature(0).all()
 #silhouette_analysis(f,f.hierarchal_clustering(normalized=True))
 
 #Number of customers & Total yearly consumption
-h = FeatureSet(include_total_cons=True, include_total_length=False)
+h = FeatureSet(include_avg_cons=True, include_total_length=False)
 assert np.size(h.get_features(),1) == 2
 assert np.size(h.get_features(),0) == 160
 assert not np.isnan(h.get_features()).any()
@@ -20,7 +20,7 @@ assert not np.isnan(h.get_features()).any()
 
 
 #Total yearly consumption & Total coductor length
-i = FeatureSet(include_total_cons=True, include_total_length=True, include_n_customer=False)
+i = FeatureSet(include_avg_cons=True, include_total_length=True, include_n_customer=False)
 assert np.size(i.get_features(),1) == 2
 assert np.size(i.get_features(),0) == 160
 assert not np.isnan(i.get_features()).any()
@@ -35,8 +35,8 @@ silhouette_analysis(i,i.k_means_clustering(normalized=True,n_repeats=10,criterio
 '''
 
 #Number of customers & Total coductor length & Total yearly consumption
-g= FeatureSet(include_total_cons=True)
-assert g.get_feature_list() == ["Number of customers","Total yearly consumption (kWh)","Total conductor length (km)"]
+g= FeatureSet(include_avg_cons=True)
+assert g.get_feature_list() == ["Number of customers","Yearly consumption per customer (kWh)","Total conductor length (km)"]
 assert np.size(g.get_features(),1) == 3
 assert np.size(g.get_features(),0) == 160
 assert not np.isnan(g.get_features()).any()
@@ -49,14 +49,14 @@ silhouette_analysis(g,g.k_medoids_clustering(normalized=True))
 '''
 
 #Number of customers & Total coductor length & Total yearly consumption & Total reactive power
-j= FeatureSet(include_total_length=True,include_total_cons=True,include_total_reactive_cons=True)
-assert j.get_feature_list() == ["Number of customers","Total yearly consumption (kWh)","Total yearly reactive consumption (kWh)","Total conductor length (km)"]
+j= FeatureSet(include_total_length=True,include_avg_cons=True,include_avg_reactive_cons=True)
+assert j.get_feature_list() == ["Number of customers","Yearly consumption per customer (kWh)","Yearly reactive consumption per customer (kWh)","Total conductor length (km)"]
 assert np.size(j.get_features(),1) == 4
 assert np.size(j.get_features(),0) == 160
 assert not np.isnan(j.get_features()).any()
 '''
 plot_2D_clusters(j,j.hierarchal_clustering(normalized=True))
-plot_2D_clusters(j,j.gaussian_mixture_model(normalized=True,n_repeats=10),x_axis="Total yearly consumption (kWh)",y_axis="Total conductor length (km)")
+plot_2D_clusters(j,j.gaussian_mixture_model(normalized=True,n_repeats=10),x_axis="Yearly consumption per customer(kWh)",y_axis="Total conductor length (km)")
 silhouette_analysis(j,j.k_medoids_clustering(normalized=True))
 '''
 
@@ -78,25 +78,10 @@ assert not np.isnan(l.get_features()).any()
 assert np.array(l.get_IDs())[l.get_feature(2)==0].all() == np.array([1246503, 1246507, 1464991, 1464997, 1465008, 1440552, 1450257,
        1931561, 1866127,   77873, 2366496, 2366498, 1405071]).all() #Cases with empty LVcustomer
 #plot_2D_clusters(l, l.gaussian_mixture_model(n_repeats=50),x_axis="Main path length (km)",y_axis="Total line impedance (Ohm)")
+#silhouette_analysis(l,l.gaussian_mixture_model(n_repeats=1000))
 
-
-#DEMO
-
-object = FeatureSet(include_n_customer=True, include_total_length=True, include_main_path=True,include_total_impedance=True)
-
-print(object.get_features())
-print(object.get_feature(0))
-print(object.get_feature("Number of customers"))
-print(object.get_IDs())
-
-cluster_1 = object.hierarchal_clustering()  #Not stochastic? So no point in repeating
-cluster_2 = object.k_means_clustering(n_clusters=9,n_repeats=50)
-cluster_3 = object.k_medoids_clustering(n_repeats=10,criterion='global_silhouette') #you can choose average or global silhouette
-cluster_4 = object.gaussian_mixture_model(n_repeats=50)
-
-print(cluster_1.get_clusters())
-
-plot_2D_clusters(object,cluster_1)
-plot_2D_clusters(object,cluster_2,x_axis="Main path length (km)",y_axis="Total line impedance (Ohm)") #what unit is "cablelength"?
-silhouette_analysis(object,cluster_3)
-silhouette_analysis(object,cluster_4)
+f = FeatureSet(include_total_length=False, include_n_customer=True, include_avg_cons=True, include_avg_reactive_cons=True, include_main_path=True, include_total_impedance=True,include_empty_feeders=False)
+res, scores = compare_algorithms(f,'avg_silhouette',1000,range(2,15))
+pickle.dump(res,open("save.p","wb"))
+silhouette_analysis(f,res['GMM'][5])
+plot_2D_clusters(f, res['GMM'][5],x_axis="Yearly consumption per customer (kWh)",y_axis="Total line impedance (Ohm)")

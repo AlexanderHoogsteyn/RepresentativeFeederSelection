@@ -9,8 +9,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1263.050179989021,
-            "yearlyNetReactiveConsumption":145.39112685753787
+            "yearlyNetConsumption":1825.614289348759,
+            "yearlyNetReactiveConsumption":123.53419778218726
         },
         {
             "busId":4,
@@ -23,8 +23,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":4142.122781540341,
-            "yearlyNetReactiveConsumption":626.6493560524373
+            "yearlyNetConsumption":4979.766502112434,
+            "yearlyNetReactiveConsumption":478.45952798210203
         },
         {
             "busId":4,
@@ -37,8 +37,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":3394.0135620909778,
-            "yearlyNetReactiveConsumption":698.075932262635
+            "yearlyNetConsumption":4333.841939272182,
+            "yearlyNetReactiveConsumption":447.09736007803497
         },
         {
             "busId":4,
@@ -51,8 +51,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":4911.757978357817,
-            "yearlyNetReactiveConsumption":625.6423831928643
+            "yearlyNetConsumption":6293.4179594564985,
+            "yearlyNetReactiveConsumption":515.7610712112718
         },
         {
             "busId":4,
@@ -65,8 +65,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":4700.931256446994,
-            "yearlyNetReactiveConsumption":504.2547292022278
+            "yearlyNetConsumption":5132.485037805494,
+            "yearlyNetReactiveConsumption":315.2240081289211
         },
         {
             "busId":4,
@@ -77,8 +77,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1426.3121554004358,
-            "yearlyNetReactiveConsumption":190.8835230597706
+            "yearlyNetConsumption":1469.3784053112747,
+            "yearlyNetReactiveConsumption":148.49439012437276
         },
         {
             "busId":4,
@@ -87,10 +87,10 @@
             "deviceId":6,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1276.010618447805,
-            "yearlyNetReactiveConsumption":138.66276800948154
+            "yearlyNetConsumption":1967.2155047965923,
+            "yearlyNetReactiveConsumption":182.49846731924194
         },
         {
             "busId":4,
@@ -101,8 +101,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1571.785838982889,
-            "yearlyNetReactiveConsumption":163.1136683962055
+            "yearlyNetConsumption":1267.6834062868536,
+            "yearlyNetReactiveConsumption":146.25209150428248
         },
         {
             "busId":4,
@@ -111,10 +111,10 @@
             "deviceId":8,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1284.7610374932526,
-            "yearlyNetReactiveConsumption":137.3331988723947
+            "yearlyNetConsumption":1561.761124777589,
+            "yearlyNetReactiveConsumption":176.62644610185637
         },
         {
             "busId":4,
@@ -123,10 +123,10 @@
             "deviceId":9,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1565.0700102213518,
-            "yearlyNetReactiveConsumption":120.74406269916176
+            "yearlyNetConsumption":1805.7898918935425,
+            "yearlyNetReactiveConsumption":147.89059996301592
         },
         {
             "busId":4,
@@ -135,10 +135,10 @@
             "deviceId":10,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1808.3113657225433,
-            "yearlyNetReactiveConsumption":98.35281443260516
+            "yearlyNetConsumption":1570.0432297772577,
+            "yearlyNetReactiveConsumption":184.6053994626764
         },
         {
             "busId":4,
@@ -147,10 +147,10 @@
             "deviceId":11,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1806.7345706119836,
-            "yearlyNetReactiveConsumption":195.8857511134853
+            "yearlyNetConsumption":1669.4915528758604,
+            "yearlyNetReactiveConsumption":140.47784746068754
         },
         {
             "busId":4,
@@ -159,10 +159,10 @@
             "deviceId":12,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1329.2421578896297,
-            "yearlyNetReactiveConsumption":128.5785428485492
+            "yearlyNetConsumption":1205.0779440983715,
+            "yearlyNetReactiveConsumption":211.6440283000965
         },
         {
             "busId":4,
@@ -171,10 +171,10 @@
             "deviceId":13,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1634.2244728338771,
-            "yearlyNetReactiveConsumption":117.44148858161535
+            "yearlyNetConsumption":1198.8364034823717,
+            "yearlyNetReactiveConsumption":136.9649631144188
         },
         {
             "busId":4,
@@ -183,10 +183,10 @@
             "deviceId":14,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1636.7009559387966,
-            "yearlyNetReactiveConsumption":130.89531765700528
+            "yearlyNetConsumption":1585.8114864793167,
+            "yearlyNetReactiveConsumption":175.98449153602468
         },
         {
             "busId":4,
@@ -195,10 +195,10 @@
             "deviceId":15,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1567.3170004507224,
-            "yearlyNetReactiveConsumption":166.07931956839877
+            "yearlyNetConsumption":1226.9682154508255,
+            "yearlyNetReactiveConsumption":131.30853459960252
         },
         {
             "busId":4,
@@ -207,10 +207,10 @@
             "deviceId":16,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1824.9684006775265,
-            "yearlyNetReactiveConsumption":147.1016371024222
+            "yearlyNetConsumption":1364.1770328237387,
+            "yearlyNetReactiveConsumption":197.89667460363916
         },
         {
             "busId":4,
@@ -219,10 +219,10 @@
             "deviceId":17,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1514.8851442346572,
-            "yearlyNetReactiveConsumption":161.255308287931
+            "yearlyNetConsumption":1062.6861069051074,
+            "yearlyNetReactiveConsumption":132.901591605557
         },
         {
             "busId":4,
@@ -233,8 +233,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1568.6122481848709,
-            "yearlyNetReactiveConsumption":167.1906452915484
+            "yearlyNetConsumption":1125.6954317232173,
+            "yearlyNetReactiveConsumption":147.4538431574317
         },
         {
             "busId":4,
@@ -245,8 +245,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":2045.322944938202,
-            "yearlyNetReactiveConsumption":111.40542686549955
+            "yearlyNetConsumption":1955.738505926515,
+            "yearlyNetReactiveConsumption":156.56918026774827
         },
         {
             "busId":4,
@@ -255,10 +255,10 @@
             "deviceId":20,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1182.222190650894,
-            "yearlyNetReactiveConsumption":137.02623977615286
+            "yearlyNetConsumption":1475.3234637355185,
+            "yearlyNetReactiveConsumption":157.60328619417785
         },
         {
             "busId":6,
@@ -267,10 +267,10 @@
             "deviceId":21,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1412.0876651708816,
-            "yearlyNetReactiveConsumption":172.34068900091114
+            "yearlyNetConsumption":2034.052495770968,
+            "yearlyNetReactiveConsumption":160.44278402814106
         },
         {
             "busId":6,
@@ -279,10 +279,10 @@
             "deviceId":22,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1220.6732147003086,
-            "yearlyNetReactiveConsumption":148.74186072957892
+            "yearlyNetConsumption":990.3986103987788,
+            "yearlyNetReactiveConsumption":167.67882613599792
         },
         {
             "busId":6,
@@ -291,10 +291,10 @@
             "deviceId":23,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1281.603332557861,
-            "yearlyNetReactiveConsumption":138.70552060974393
+            "yearlyNetConsumption":1149.856250257424,
+            "yearlyNetReactiveConsumption":106.01939336908828
         },
         {
             "busId":6,
@@ -305,8 +305,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1744.6008909729321,
-            "yearlyNetReactiveConsumption":159.15782474701817
+            "yearlyNetConsumption":1660.6807443745868,
+            "yearlyNetReactiveConsumption":140.3973846896204
         },
         {
             "busId":6,
@@ -315,10 +315,10 @@
             "deviceId":25,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1371.0648626769141,
-            "yearlyNetReactiveConsumption":148.11212942648243
+            "yearlyNetConsumption":1383.459215479373,
+            "yearlyNetReactiveConsumption":139.7344359678131
         },
         {
             "busId":6,
@@ -327,10 +327,10 @@
             "deviceId":26,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1554.840783831457,
-            "yearlyNetReactiveConsumption":113.07747899303794
+            "yearlyNetConsumption":1384.475623134933,
+            "yearlyNetReactiveConsumption":121.79301830058336
         },
         {
             "busId":6,
@@ -339,10 +339,10 @@
             "deviceId":27,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1682.0721370836668,
-            "yearlyNetReactiveConsumption":116.94278041025291
+            "yearlyNetConsumption":1574.954435181333,
+            "yearlyNetReactiveConsumption":122.49714593991123
         },
         {
             "busId":6,
@@ -351,10 +351,10 @@
             "deviceId":28,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1783.6366218997496,
-            "yearlyNetReactiveConsumption":183.3046951383684
+            "yearlyNetConsumption":1734.0696209515472,
+            "yearlyNetReactiveConsumption":161.90469856654423
         },
         {
             "busId":6,
@@ -363,10 +363,10 @@
             "deviceId":29,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1273.2509503112703,
-            "yearlyNetReactiveConsumption":166.5768274996253
+            "yearlyNetConsumption":1106.0973763418222,
+            "yearlyNetReactiveConsumption":106.42235077461532
         },
         {
             "busId":6,
@@ -375,10 +375,10 @@
             "deviceId":30,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1498.107253545651,
-            "yearlyNetReactiveConsumption":199.86610940363684
+            "yearlyNetConsumption":1181.4350405309024,
+            "yearlyNetReactiveConsumption":160.49282128920876
         },
         {
             "busId":6,
@@ -387,10 +387,10 @@
             "deviceId":31,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1594.0339377690673,
-            "yearlyNetReactiveConsumption":139.66890340717856
+            "yearlyNetConsumption":1562.593988295767,
+            "yearlyNetReactiveConsumption":155.47212084819228
         },
         {
             "busId":6,
@@ -399,10 +399,10 @@
             "deviceId":32,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1217.6864023885896,
-            "yearlyNetReactiveConsumption":148.74496929667595
+            "yearlyNetConsumption":2009.4480245605603,
+            "yearlyNetReactiveConsumption":130.0485540942195
         },
         {
             "busId":6,
@@ -411,10 +411,10 @@
             "deviceId":33,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1276.0317153163699,
-            "yearlyNetReactiveConsumption":143.23177222364413
+            "yearlyNetConsumption":1574.479463487583,
+            "yearlyNetReactiveConsumption":149.91116376360398
         },
         {
             "busId":6,
@@ -427,8 +427,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":4924.918096208223,
-            "yearlyNetReactiveConsumption":517.0513131376257
+            "yearlyNetConsumption":5666.711321210574,
+            "yearlyNetReactiveConsumption":424.94126930560105
         },
         {
             "busId":6,
@@ -441,8 +441,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":5560.160961306719,
-            "yearlyNetReactiveConsumption":550.499437899898
+            "yearlyNetConsumption":4351.003248019044,
+            "yearlyNetReactiveConsumption":598.3217320308161
         },
         {
             "busId":6,
@@ -455,8 +455,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":3559.177894517291,
-            "yearlyNetReactiveConsumption":493.47185817219645
+            "yearlyNetConsumption":3406.6783766716007,
+            "yearlyNetReactiveConsumption":560.8157822093034
         },
         {
             "busId":6,
@@ -465,10 +465,10 @@
             "deviceId":37,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1326.996754072503,
-            "yearlyNetReactiveConsumption":146.36485555402703
+            "yearlyNetConsumption":1742.2964242089838,
+            "yearlyNetReactiveConsumption":155.54453920715406
         },
         {
             "busId":6,
@@ -479,8 +479,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1694.1459348323524,
-            "yearlyNetReactiveConsumption":111.02330487174268
+            "yearlyNetConsumption":1299.9995041028053,
+            "yearlyNetReactiveConsumption":206.57660340763255
         },
         {
             "busId":6,
@@ -489,10 +489,10 @@
             "deviceId":39,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1131.090772260359,
-            "yearlyNetReactiveConsumption":142.38431019574665
+            "yearlyNetConsumption":1352.7382131160218,
+            "yearlyNetReactiveConsumption":157.87226248687148
         },
         {
             "busId":6,
@@ -501,10 +501,10 @@
             "deviceId":40,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1652.6096371005092,
-            "yearlyNetReactiveConsumption":114.61989548709614
+            "yearlyNetConsumption":1356.1000144829447,
+            "yearlyNetReactiveConsumption":151.9083815043462
         },
         {
             "busId":8,
@@ -513,10 +513,10 @@
             "deviceId":41,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1609.3254230229372,
-            "yearlyNetReactiveConsumption":166.67280033782936
+            "yearlyNetConsumption":1018.1821471759272,
+            "yearlyNetReactiveConsumption":196.69030324647423
         },
         {
             "busId":8,
@@ -527,8 +527,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1550.140389893705,
-            "yearlyNetReactiveConsumption":160.0205063473186
+            "yearlyNetConsumption":1643.8549157279863,
+            "yearlyNetReactiveConsumption":143.62625517046396
         },
         {
             "busId":8,
@@ -537,10 +537,10 @@
             "deviceId":43,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1358.5017853678416,
-            "yearlyNetReactiveConsumption":156.13987717888133
+            "yearlyNetConsumption":1996.849806308236,
+            "yearlyNetReactiveConsumption":173.57848487263325
         },
         {
             "busId":8,
@@ -549,10 +549,10 @@
             "deviceId":44,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1461.1977351727094,
-            "yearlyNetReactiveConsumption":149.1785748353064
+            "yearlyNetConsumption":1717.8195457279965,
+            "yearlyNetReactiveConsumption":173.67406117590912
         },
         {
             "busId":8,
@@ -563,8 +563,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1547.672893739133,
-            "yearlyNetReactiveConsumption":137.34091095465948
+            "yearlyNetConsumption":1676.111602568041,
+            "yearlyNetReactiveConsumption":154.18805835557825
         },
         {
             "busId":8,
@@ -575,8 +575,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1372.8992311172653,
-            "yearlyNetReactiveConsumption":109.51460305548852
+            "yearlyNetConsumption":1351.6223502056316,
+            "yearlyNetReactiveConsumption":156.00553693271937
         },
         {
             "busId":8,
@@ -587,8 +587,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1766.7142776958633,
-            "yearlyNetReactiveConsumption":113.69156103707533
+            "yearlyNetConsumption":1839.4936710945549,
+            "yearlyNetReactiveConsumption":143.49178567390308
         },
         {
             "busId":8,
@@ -597,10 +597,10 @@
             "deviceId":48,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1832.028408852911,
-            "yearlyNetReactiveConsumption":167.72476553911042
+            "yearlyNetConsumption":1644.1954032542649,
+            "yearlyNetReactiveConsumption":174.0313003625897
         },
         {
             "busId":8,
@@ -609,10 +609,10 @@
             "deviceId":49,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1599.1183837997194,
-            "yearlyNetReactiveConsumption":149.74158937338046
+            "yearlyNetConsumption":1232.5571904726849,
+            "yearlyNetReactiveConsumption":204.27918135562948
         },
         {
             "busId":8,
@@ -621,10 +621,10 @@
             "deviceId":50,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1887.9018236021939,
-            "yearlyNetReactiveConsumption":163.24746000841762
+            "yearlyNetConsumption":1655.400842580605,
+            "yearlyNetReactiveConsumption":165.35245549750186
         },
         {
             "busId":8,
@@ -635,8 +635,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1606.9472048804828,
-            "yearlyNetReactiveConsumption":133.60347693329348
+            "yearlyNetConsumption":1527.8599051689384,
+            "yearlyNetReactiveConsumption":157.57992001238125
         },
         {
             "busId":8,
@@ -647,8 +647,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1569.3848768063192,
-            "yearlyNetReactiveConsumption":187.13096084200603
+            "yearlyNetConsumption":1808.714045124352,
+            "yearlyNetReactiveConsumption":163.144857433749
         },
         {
             "busId":8,
@@ -657,10 +657,10 @@
             "deviceId":53,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1682.7943025415234,
-            "yearlyNetReactiveConsumption":118.92602619884792
+            "yearlyNetConsumption":1786.935803647865,
+            "yearlyNetReactiveConsumption":148.8721320682791
         },
         {
             "busId":8,
@@ -673,8 +673,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":5263.3105972218145,
-            "yearlyNetReactiveConsumption":387.8563707865451
+            "yearlyNetConsumption":4192.548864725986,
+            "yearlyNetReactiveConsumption":481.1731880178592
         },
         {
             "busId":10,
@@ -683,10 +683,10 @@
             "deviceId":55,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1352.0823768265614,
-            "yearlyNetReactiveConsumption":142.20714546195669
+            "yearlyNetConsumption":1562.6075922382147,
+            "yearlyNetReactiveConsumption":176.09545315344036
         },
         {
             "busId":10,
@@ -695,10 +695,10 @@
             "deviceId":56,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1783.6640047419944,
-            "yearlyNetReactiveConsumption":125.9333994208339
+            "yearlyNetConsumption":1563.6891374136994,
+            "yearlyNetReactiveConsumption":136.2501141043507
         },
         {
             "busId":10,
@@ -709,8 +709,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1534.4526925669047,
-            "yearlyNetReactiveConsumption":160.82003552572468
+            "yearlyNetConsumption":1064.3123271606735,
+            "yearlyNetReactiveConsumption":190.31791439420635
         },
         {
             "busId":10,
@@ -719,10 +719,10 @@
             "deviceId":58,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1798.2002370861278,
-            "yearlyNetReactiveConsumption":144.2220189419261
+            "yearlyNetConsumption":1728.1120619614378,
+            "yearlyNetReactiveConsumption":144.7548123610114
         },
         {
             "busId":10,
@@ -731,10 +731,10 @@
             "deviceId":59,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1487.2773698477206,
-            "yearlyNetReactiveConsumption":109.94828992195895
+            "yearlyNetConsumption":1341.6815879310873,
+            "yearlyNetReactiveConsumption":110.3960946775801
         },
         {
             "busId":10,
@@ -743,10 +743,10 @@
             "deviceId":60,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1279.23587228084,
-            "yearlyNetReactiveConsumption":157.60987053374754
+            "yearlyNetConsumption":1766.092815717529,
+            "yearlyNetReactiveConsumption":173.01504701545596
         },
         {
             "busId":10,
@@ -757,8 +757,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1333.3825741154715,
-            "yearlyNetReactiveConsumption":137.3071513165743
+            "yearlyNetConsumption":1315.0041879932762,
+            "yearlyNetReactiveConsumption":178.60228992453827
         },
         {
             "busId":10,
@@ -769,8 +769,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1679.942110111361,
-            "yearlyNetReactiveConsumption":129.39663568254247
+            "yearlyNetConsumption":1153.1841088120113,
+            "yearlyNetReactiveConsumption":152.19970585181298
         },
         {
             "busId":10,
@@ -781,8 +781,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1389.704505725123,
-            "yearlyNetReactiveConsumption":170.2533465886271
+            "yearlyNetConsumption":1458.8122273071183,
+            "yearlyNetReactiveConsumption":144.67469883330227
         },
         {
             "busId":10,
@@ -791,10 +791,10 @@
             "deviceId":64,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":964.653541908725,
-            "yearlyNetReactiveConsumption":192.35203036098986
+            "yearlyNetConsumption":1512.7967963304268,
+            "yearlyNetReactiveConsumption":129.87424802110576
         },
         {
             "busId":10,
@@ -803,10 +803,10 @@
             "deviceId":65,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":2239.7937213034243,
-            "yearlyNetReactiveConsumption":131.68285987117196
+            "yearlyNetConsumption":1558.3093578576988,
+            "yearlyNetReactiveConsumption":135.92960561502966
         },
         {
             "busId":10,
@@ -815,10 +815,10 @@
             "deviceId":66,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1241.9838122119525,
-            "yearlyNetReactiveConsumption":168.10956100926293
+            "yearlyNetConsumption":1630.5467589775035,
+            "yearlyNetReactiveConsumption":165.47617997356735
         },
         {
             "busId":10,
@@ -829,8 +829,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1174.1759092013313,
-            "yearlyNetReactiveConsumption":96.90779227981886
+            "yearlyNetConsumption":1393.6386268820972,
+            "yearlyNetReactiveConsumption":149.45973987124063
         },
         {
             "busId":10,
@@ -839,10 +839,10 @@
             "deviceId":68,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1511.1486704644897,
-            "yearlyNetReactiveConsumption":179.08641181563044
+            "yearlyNetConsumption":1664.0449851911603,
+            "yearlyNetReactiveConsumption":158.81983531366106
         },
         {
             "busId":10,
@@ -851,10 +851,10 @@
             "deviceId":69,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1186.3014988818943,
-            "yearlyNetReactiveConsumption":132.01499298685758
+            "yearlyNetConsumption":1680.712646126752,
+            "yearlyNetReactiveConsumption":125.44132034066621
         },
         {
             "busId":10,
@@ -863,10 +863,10 @@
             "deviceId":70,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1341.711209099429,
-            "yearlyNetReactiveConsumption":133.33536910364344
+            "yearlyNetConsumption":1800.7688861455988,
+            "yearlyNetReactiveConsumption":123.13701610645032
         },
         {
             "busId":10,
@@ -875,10 +875,10 @@
             "deviceId":71,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1851.9965387976035,
-            "yearlyNetReactiveConsumption":148.4996690030932
+            "yearlyNetConsumption":1371.666473409062,
+            "yearlyNetReactiveConsumption":121.37183071818336
         },
         {
             "busId":10,
@@ -891,8 +891,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":5070.343084727261,
-            "yearlyNetReactiveConsumption":536.5562389343806
+            "yearlyNetConsumption":4362.54138806341,
+            "yearlyNetReactiveConsumption":592.8680594735041
         },
         {
             "busId":10,
@@ -905,8 +905,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":4509.770401359944,
-            "yearlyNetReactiveConsumption":559.0288402636743
+            "yearlyNetConsumption":3157.2026217459916,
+            "yearlyNetReactiveConsumption":497.5511397586144
         },
         {
             "busId":10,
@@ -917,8 +917,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1690.19930611219,
-            "yearlyNetReactiveConsumption":234.88853111062218
+            "yearlyNetConsumption":1557.777160654251,
+            "yearlyNetReactiveConsumption":155.03191212546432
         },
         {
             "busId":12,
@@ -929,8 +929,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1316.7381596616945,
-            "yearlyNetReactiveConsumption":175.45824689691278
+            "yearlyNetConsumption":1244.9129887529868,
+            "yearlyNetReactiveConsumption":146.2253815969358
         },
         {
             "busId":12,
@@ -939,10 +939,10 @@
             "deviceId":76,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1167.199920881399,
-            "yearlyNetReactiveConsumption":139.65933996435524
+            "yearlyNetConsumption":1768.995005957339,
+            "yearlyNetReactiveConsumption":175.07873490625727
         },
         {
             "busId":12,
@@ -951,10 +951,10 @@
             "deviceId":77,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1135.7855534764597,
-            "yearlyNetReactiveConsumption":170.3125619827339
+            "yearlyNetConsumption":1359.988612945039,
+            "yearlyNetReactiveConsumption":177.34353483690035
         },
         {
             "busId":12,
@@ -965,8 +965,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1058.5899144654663,
-            "yearlyNetReactiveConsumption":181.27985775071568
+            "yearlyNetConsumption":1599.7714469828204,
+            "yearlyNetReactiveConsumption":150.86925646995817
         },
         {
             "busId":12,
@@ -977,8 +977,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1733.2239949415994,
-            "yearlyNetReactiveConsumption":117.89637042269399
+            "yearlyNetConsumption":1367.8929780348703,
+            "yearlyNetReactiveConsumption":150.21105721911468
         },
         {
             "busId":12,
@@ -987,10 +987,10 @@
             "deviceId":80,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":931.9218822986659,
-            "yearlyNetReactiveConsumption":120.23044054585657
+            "yearlyNetConsumption":1468.9446410409885,
+            "yearlyNetReactiveConsumption":179.4565740914767
         },
         {
             "busId":12,
@@ -999,10 +999,10 @@
             "deviceId":81,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1861.8582068388143,
-            "yearlyNetReactiveConsumption":175.03005881314564
+            "yearlyNetConsumption":880.0674862750005,
+            "yearlyNetReactiveConsumption":143.09992135350177
         },
         {
             "busId":12,
@@ -1013,8 +1013,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1335.8411757289086,
-            "yearlyNetReactiveConsumption":142.4780102797697
+            "yearlyNetConsumption":1509.4813218363206,
+            "yearlyNetReactiveConsumption":161.2016115773943
         },
         {
             "busId":12,
@@ -1023,10 +1023,10 @@
             "deviceId":83,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1424.468405743999,
-            "yearlyNetReactiveConsumption":137.37161240261864
+            "yearlyNetConsumption":1125.8308996788403,
+            "yearlyNetReactiveConsumption":152.25004039185546
         },
         {
             "busId":12,
@@ -1035,10 +1035,10 @@
             "deviceId":84,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1450.3058823669678,
-            "yearlyNetReactiveConsumption":151.82008075769167
+            "yearlyNetConsumption":1581.6733654890934,
+            "yearlyNetReactiveConsumption":134.99561869969338
         },
         {
             "busId":12,
@@ -1049,8 +1049,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":968.3950081498323,
-            "yearlyNetReactiveConsumption":143.02445070459538
+            "yearlyNetConsumption":1526.5505787634922,
+            "yearlyNetReactiveConsumption":154.65047078024887
         },
         {
             "busId":12,
@@ -1059,10 +1059,10 @@
             "deviceId":86,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1538.8550804507813,
-            "yearlyNetReactiveConsumption":134.49887589266277
+            "yearlyNetConsumption":1014.6972864293145,
+            "yearlyNetReactiveConsumption":165.4039513734932
         },
         {
             "busId":12,
@@ -1073,8 +1073,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1654.7138855812898,
-            "yearlyNetReactiveConsumption":141.68023164784384
+            "yearlyNetConsumption":1296.341222158717,
+            "yearlyNetReactiveConsumption":197.05515932731709
         },
         {
             "busId":12,
@@ -1085,8 +1085,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1715.8880539069382,
-            "yearlyNetReactiveConsumption":157.20400554633758
+            "yearlyNetConsumption":1728.1052184191678,
+            "yearlyNetReactiveConsumption":163.93975667364884
         },
         {
             "busId":12,
@@ -1095,10 +1095,10 @@
             "deviceId":89,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1477.8358247949054,
-            "yearlyNetReactiveConsumption":136.2993616655061
+            "yearlyNetConsumption":1487.3173369564984,
+            "yearlyNetReactiveConsumption":155.91444372776792
         },
         {
             "busId":12,
@@ -1109,8 +1109,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1787.4280384282151,
-            "yearlyNetReactiveConsumption":132.29744597644844
+            "yearlyNetConsumption":1342.0624681693396,
+            "yearlyNetReactiveConsumption":115.50031513047904
         },
         {
             "busId":12,
@@ -1119,10 +1119,10 @@
             "deviceId":91,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1558.863246740637,
-            "yearlyNetReactiveConsumption":142.23109753904237
+            "yearlyNetConsumption":1879.875766018091,
+            "yearlyNetReactiveConsumption":158.03733154204224
         },
         {
             "busId":12,
@@ -1131,10 +1131,10 @@
             "deviceId":92,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":2074.4864698118286,
-            "yearlyNetReactiveConsumption":153.22428767594036
+            "yearlyNetConsumption":1836.1225068665788,
+            "yearlyNetReactiveConsumption":174.65609237931542
         },
         {
             "busId":12,
@@ -1147,8 +1147,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":2492.1868975527063,
-            "yearlyNetReactiveConsumption":663.3329829834645
+            "yearlyNetConsumption":6177.148917445738,
+            "yearlyNetReactiveConsumption":383.05765902304
         },
         {
             "busId":12,
@@ -1161,8 +1161,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":5297.419822898238,
-            "yearlyNetReactiveConsumption":614.462666496684
+            "yearlyNetConsumption":4874.40109663058,
+            "yearlyNetReactiveConsumption":490.7373103422651
         },
         {
             "busId":12,
@@ -1173,8 +1173,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1541.9920735394048,
-            "yearlyNetReactiveConsumption":136.32275656576766
+            "yearlyNetConsumption":1482.4933017693347,
+            "yearlyNetReactiveConsumption":142.41822255225117
         },
         {
             "busId":14,
@@ -1183,10 +1183,10 @@
             "deviceId":96,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1640.621674841625,
-            "yearlyNetReactiveConsumption":139.90160254027967
+            "yearlyNetConsumption":1074.537774309144,
+            "yearlyNetReactiveConsumption":153.54796417795762
         },
         {
             "busId":14,
@@ -1195,10 +1195,10 @@
             "deviceId":97,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1737.2300252928842,
-            "yearlyNetReactiveConsumption":183.56523451906264
+            "yearlyNetConsumption":1105.8779659824895,
+            "yearlyNetReactiveConsumption":114.1868485366281
         },
         {
             "busId":14,
@@ -1207,10 +1207,10 @@
             "deviceId":98,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1105.5683462460324,
-            "yearlyNetReactiveConsumption":130.97855475040268
+            "yearlyNetConsumption":1923.812242029036,
+            "yearlyNetReactiveConsumption":147.76263057419652
         },
         {
             "busId":14,
@@ -1219,10 +1219,10 @@
             "deviceId":99,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1389.6081983265913,
-            "yearlyNetReactiveConsumption":128.77437624455112
+            "yearlyNetConsumption":1684.5775694240206,
+            "yearlyNetReactiveConsumption":140.41631618197013
         },
         {
             "busId":14,
@@ -1231,10 +1231,10 @@
             "deviceId":100,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1731.5405191875275,
-            "yearlyNetReactiveConsumption":143.52456160598345
+            "yearlyNetConsumption":1572.8067839139617,
+            "yearlyNetReactiveConsumption":142.06683229824924
         },
         {
             "busId":14,
@@ -1243,10 +1243,10 @@
             "deviceId":101,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1354.978472902235,
-            "yearlyNetReactiveConsumption":180.30945479116008
+            "yearlyNetConsumption":1814.7354747491227,
+            "yearlyNetReactiveConsumption":127.21535073400375
         },
         {
             "busId":14,
@@ -1255,10 +1255,10 @@
             "deviceId":102,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1568.397031561184,
-            "yearlyNetReactiveConsumption":171.19735883568245
+            "yearlyNetConsumption":1525.652353108719,
+            "yearlyNetReactiveConsumption":134.17485001171488
         },
         {
             "busId":14,
@@ -1269,8 +1269,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1098.205363645577,
-            "yearlyNetReactiveConsumption":143.11238864111814
+            "yearlyNetConsumption":1301.56063974701,
+            "yearlyNetReactiveConsumption":174.3997937980652
         },
         {
             "busId":14,
@@ -1279,10 +1279,10 @@
             "deviceId":104,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1612.666709234893,
-            "yearlyNetReactiveConsumption":170.55130588282202
+            "yearlyNetConsumption":1454.7117020583305,
+            "yearlyNetReactiveConsumption":158.90443394338956
         },
         {
             "busId":14,
@@ -1293,8 +1293,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1542.3044907716164,
-            "yearlyNetReactiveConsumption":117.539689923435
+            "yearlyNetConsumption":1676.7891198563302,
+            "yearlyNetReactiveConsumption":142.57595021540632
         },
         {
             "busId":14,
@@ -1303,10 +1303,10 @@
             "deviceId":106,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1614.2840208415562,
-            "yearlyNetReactiveConsumption":96.61548118369332
+            "yearlyNetConsumption":1549.7796028964492,
+            "yearlyNetReactiveConsumption":143.79249392680134
         },
         {
             "busId":14,
@@ -1315,10 +1315,10 @@
             "deviceId":107,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1513.267149362142,
-            "yearlyNetReactiveConsumption":137.51674735649408
+            "yearlyNetConsumption":1428.2055779245868,
+            "yearlyNetReactiveConsumption":130.29463616172512
         },
         {
             "busId":14,
@@ -1331,8 +1331,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":3966.8919282145653,
-            "yearlyNetReactiveConsumption":620.1458102739134
+            "yearlyNetConsumption":5024.326595767063,
+            "yearlyNetReactiveConsumption":315.3713251060818
         },
         {
             "busId":14,
@@ -1343,8 +1343,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1196.5941909322908,
-            "yearlyNetReactiveConsumption":164.58623112853812
+            "yearlyNetConsumption":1299.896453892972,
+            "yearlyNetReactiveConsumption":159.83940122628394
         },
         {
             "busId":14,
@@ -1355,8 +1355,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1410.8898261641043,
-            "yearlyNetReactiveConsumption":164.27681047116246
+            "yearlyNetConsumption":1594.6357173937051,
+            "yearlyNetReactiveConsumption":161.49752312344248
         },
         {
             "busId":14,
@@ -1365,10 +1365,10 @@
             "deviceId":111,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1035.972224574914,
-            "yearlyNetReactiveConsumption":114.03632618315321
+            "yearlyNetConsumption":1245.6200070680063,
+            "yearlyNetReactiveConsumption":163.84266343963728
         },
         {
             "busId":16,
@@ -1377,10 +1377,10 @@
             "deviceId":112,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1407.1701320549164,
-            "yearlyNetReactiveConsumption":172.70464147056313
+            "yearlyNetConsumption":1253.7360787207176,
+            "yearlyNetReactiveConsumption":160.5803073214685
         },
         {
             "busId":16,
@@ -1391,8 +1391,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1612.0322316930958,
-            "yearlyNetReactiveConsumption":197.47285536856748
+            "yearlyNetConsumption":1574.421322495801,
+            "yearlyNetReactiveConsumption":131.31659586268245
         },
         {
             "busId":16,
@@ -1403,8 +1403,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1419.961484055638,
-            "yearlyNetReactiveConsumption":114.41176308264838
+            "yearlyNetConsumption":1668.6552130640484,
+            "yearlyNetReactiveConsumption":181.09303972151488
         },
         {
             "busId":16,
@@ -1413,10 +1413,10 @@
             "deviceId":115,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1453.0956913166692,
-            "yearlyNetReactiveConsumption":128.2778180906257
+            "yearlyNetConsumption":1483.1131097836026,
+            "yearlyNetReactiveConsumption":168.13400758018054
         },
         {
             "busId":16,
@@ -1425,10 +1425,10 @@
             "deviceId":116,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1529.2776536994347,
-            "yearlyNetReactiveConsumption":110.4198014178088
+            "yearlyNetConsumption":1804.8647160153607,
+            "yearlyNetReactiveConsumption":108.00039418648281
         },
         {
             "busId":16,
@@ -1437,10 +1437,10 @@
             "deviceId":117,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1599.0536858458893,
-            "yearlyNetReactiveConsumption":135.8410379093424
+            "yearlyNetConsumption":1602.4564891979314,
+            "yearlyNetReactiveConsumption":149.94173030788215
         },
         {
             "busId":16,
@@ -1449,10 +1449,10 @@
             "deviceId":118,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1534.5120083662034,
-            "yearlyNetReactiveConsumption":160.52021653052427
+            "yearlyNetConsumption":1162.3238039110984,
+            "yearlyNetReactiveConsumption":78.28295037917842
         },
         {
             "busId":16,
@@ -1465,8 +1465,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":5834.467956933548,
-            "yearlyNetReactiveConsumption":593.9424198462826
+            "yearlyNetConsumption":4211.626831562226,
+            "yearlyNetReactiveConsumption":270.93688087876194
         },
         {
             "busId":16,
@@ -1479,8 +1479,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":3021.6045956144835,
-            "yearlyNetReactiveConsumption":454.68260444789655
+            "yearlyNetConsumption":5594.7299919799025,
+            "yearlyNetReactiveConsumption":487.8279812334866
         },
         {
             "busId":19,
@@ -1493,8 +1493,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":5186.151305332034,
-            "yearlyNetReactiveConsumption":639.6733457346642
+            "yearlyNetConsumption":4847.929205698316,
+            "yearlyNetReactiveConsumption":573.0034148601609
         },
         {
             "busId":21,
@@ -1503,10 +1503,10 @@
             "deviceId":122,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1942.1477090933804,
-            "yearlyNetReactiveConsumption":136.33457395141528
+            "yearlyNetConsumption":1306.5016798704698,
+            "yearlyNetReactiveConsumption":145.86389142972683
         },
         {
             "busId":21,
@@ -1515,10 +1515,10 @@
             "deviceId":123,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1358.381519309137,
-            "yearlyNetReactiveConsumption":153.4979903168281
+            "yearlyNetConsumption":1787.6984923657706,
+            "yearlyNetReactiveConsumption":146.123898281521
         },
         {
             "busId":21,
@@ -1527,10 +1527,10 @@
             "deviceId":124,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":2159.950595737222,
-            "yearlyNetReactiveConsumption":175.707553753617
+            "yearlyNetConsumption":1730.7024244160007,
+            "yearlyNetReactiveConsumption":165.53939892786013
         },
         {
             "busId":21,
@@ -1541,8 +1541,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1130.0142952626352,
-            "yearlyNetReactiveConsumption":122.14297377711637
+            "yearlyNetConsumption":1404.548632418394,
+            "yearlyNetReactiveConsumption":165.17264887524678
         },
         {
             "busId":21,
@@ -1551,10 +1551,10 @@
             "deviceId":126,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":2074.02944330051,
-            "yearlyNetReactiveConsumption":136.1988955369897
+            "yearlyNetConsumption":1813.8780356123584,
+            "yearlyNetReactiveConsumption":175.3205408014723
         },
         {
             "busId":21,
@@ -1563,10 +1563,10 @@
             "deviceId":127,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1628.8692720464314,
-            "yearlyNetReactiveConsumption":154.19826321242357
+            "yearlyNetConsumption":1645.285133664027,
+            "yearlyNetReactiveConsumption":123.5740996328677
         },
         {
             "busId":21,
@@ -1575,10 +1575,10 @@
             "deviceId":128,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1360.5182521111212,
-            "yearlyNetReactiveConsumption":109.64159553283034
+            "yearlyNetConsumption":1433.2092278576072,
+            "yearlyNetReactiveConsumption":129.05383323799495
         },
         {
             "busId":21,
@@ -1587,10 +1587,10 @@
             "deviceId":129,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1403.3224446136137,
-            "yearlyNetReactiveConsumption":108.83527545589473
+            "yearlyNetConsumption":1437.0345394862215,
+            "yearlyNetReactiveConsumption":158.03632375808328
         },
         {
             "busId":21,
@@ -1599,10 +1599,10 @@
             "deviceId":130,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1667.1936531439162,
-            "yearlyNetReactiveConsumption":149.71106341417968
+            "yearlyNetConsumption":1453.174344650129,
+            "yearlyNetReactiveConsumption":169.602337118256
         },
         {
             "busId":21,
@@ -1611,10 +1611,10 @@
             "deviceId":131,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1167.6887698876071,
-            "yearlyNetReactiveConsumption":149.56459955770606
+            "yearlyNetConsumption":1972.3705615864428,
+            "yearlyNetReactiveConsumption":200.1473708426435
         },
         {
             "busId":21,
@@ -1623,10 +1623,10 @@
             "deviceId":132,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1656.2515089796962,
-            "yearlyNetReactiveConsumption":198.7209258656845
+            "yearlyNetConsumption":1383.2638916011674,
+            "yearlyNetReactiveConsumption":113.076658406099
         },
         {
             "busId":21,
@@ -1639,8 +1639,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":5197.396141246621,
-            "yearlyNetReactiveConsumption":508.6004670951989
+            "yearlyNetConsumption":5126.334941443504,
+            "yearlyNetReactiveConsumption":587.354752977032
         },
         {
             "busId":21,
@@ -1651,8 +1651,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1306.9839381099391,
-            "yearlyNetReactiveConsumption":149.3059488175388
+            "yearlyNetConsumption":1263.9777412570563,
+            "yearlyNetReactiveConsumption":128.62499409256384
         },
         {
             "busId":21,
@@ -1661,10 +1661,10 @@
             "deviceId":135,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1622.7188670404566,
-            "yearlyNetReactiveConsumption":217.10736595847925
+            "yearlyNetConsumption":1548.1695001653482,
+            "yearlyNetReactiveConsumption":164.15570839756904
         },
         {
             "busId":23,
@@ -1673,10 +1673,10 @@
             "deviceId":136,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1292.2336543477231,
-            "yearlyNetReactiveConsumption":152.6011188950464
+            "yearlyNetConsumption":1209.2940030718128,
+            "yearlyNetReactiveConsumption":164.9250579938895
         },
         {
             "busId":23,
@@ -1685,10 +1685,10 @@
             "deviceId":137,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1038.1466349220814,
-            "yearlyNetReactiveConsumption":143.15792062050826
+            "yearlyNetConsumption":1276.721343704789,
+            "yearlyNetReactiveConsumption":182.61769777705888
         },
         {
             "busId":23,
@@ -1697,10 +1697,10 @@
             "deviceId":138,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":967.7617526723698,
-            "yearlyNetReactiveConsumption":101.66740809980794
+            "yearlyNetConsumption":1681.7975958252741,
+            "yearlyNetReactiveConsumption":171.64800477027822
         },
         {
             "busId":23,
@@ -1709,10 +1709,10 @@
             "deviceId":139,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1594.525692865821,
-            "yearlyNetReactiveConsumption":208.63196865970667
+            "yearlyNetConsumption":1146.6586828305878,
+            "yearlyNetReactiveConsumption":128.91382951702445
         },
         {
             "busId":23,
@@ -1721,10 +1721,10 @@
             "deviceId":140,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1949.6410931335452,
-            "yearlyNetReactiveConsumption":151.3847591084168
+            "yearlyNetConsumption":1829.9649870858018,
+            "yearlyNetReactiveConsumption":121.00731538255103
         },
         {
             "busId":23,
@@ -1735,8 +1735,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1401.7932887507902,
-            "yearlyNetReactiveConsumption":155.1774959224555
+            "yearlyNetConsumption":998.4303388186358,
+            "yearlyNetReactiveConsumption":126.9452631396572
         },
         {
             "busId":23,
@@ -1745,10 +1745,10 @@
             "deviceId":142,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1295.0242592983836,
-            "yearlyNetReactiveConsumption":185.5004788689887
+            "yearlyNetConsumption":1308.4971572657794,
+            "yearlyNetReactiveConsumption":127.86118265910547
         },
         {
             "busId":23,
@@ -1757,10 +1757,10 @@
             "deviceId":143,
             "exclusiveNight":false,
             "phases":[
-                3
+                1
             ],
-            "yearlyNetConsumption":1276.0013343352416,
-            "yearlyNetReactiveConsumption":173.97489526090808
+            "yearlyNetConsumption":1075.2957937439419,
+            "yearlyNetReactiveConsumption":132.49346096531542
         },
         {
             "busId":23,
@@ -1769,10 +1769,10 @@
             "deviceId":144,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":1246.3165657650488,
-            "yearlyNetReactiveConsumption":126.68927945604808
+            "yearlyNetConsumption":1510.2590502894532,
+            "yearlyNetReactiveConsumption":167.00689384582873
         },
         {
             "busId":23,
@@ -1783,8 +1783,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1112.3431120891291,
-            "yearlyNetReactiveConsumption":161.88334240805762
+            "yearlyNetConsumption":1470.9382931937287,
+            "yearlyNetReactiveConsumption":143.0496171716678
         },
         {
             "busId":23,
@@ -1793,10 +1793,10 @@
             "deviceId":146,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1524.8080741440524,
-            "yearlyNetReactiveConsumption":163.11254373454668
+            "yearlyNetConsumption":1198.8833916819744,
+            "yearlyNetReactiveConsumption":167.48807200710212
         },
         {
             "busId":23,
@@ -1809,8 +1809,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":4845.907139904195,
-            "yearlyNetReactiveConsumption":600.1881047370937
+            "yearlyNetConsumption":4291.52697278666,
+            "yearlyNetReactiveConsumption":483.7815320304811
         },
         {
             "busId":23,
@@ -1819,10 +1819,10 @@
             "deviceId":148,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1642.311221889969,
-            "yearlyNetReactiveConsumption":166.1597808669077
+            "yearlyNetConsumption":1790.4706655679724,
+            "yearlyNetReactiveConsumption":133.8121217181843
         },
         {
             "busId":23,
@@ -1831,10 +1831,10 @@
             "deviceId":149,
             "exclusiveNight":false,
             "phases":[
-                2
+                1
             ],
-            "yearlyNetConsumption":1527.9996627819226,
-            "yearlyNetReactiveConsumption":146.03188405182436
+            "yearlyNetConsumption":1465.0574055325724,
+            "yearlyNetReactiveConsumption":171.24663916310362
         },
         {
             "busId":25,
@@ -1845,8 +1845,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1703.4241483634728,
-            "yearlyNetReactiveConsumption":140.26238462561346
+            "yearlyNetConsumption":1598.9753105212503,
+            "yearlyNetReactiveConsumption":174.09697933381392
         },
         {
             "busId":25,
@@ -1857,8 +1857,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1693.306726782368,
-            "yearlyNetReactiveConsumption":157.9208464686649
+            "yearlyNetConsumption":1784.4038966035016,
+            "yearlyNetReactiveConsumption":192.69181655085725
         },
         {
             "busId":25,
@@ -1869,8 +1869,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1722.8678236751678,
-            "yearlyNetReactiveConsumption":176.19185816085383
+            "yearlyNetConsumption":1090.6000867396933,
+            "yearlyNetReactiveConsumption":144.75141120823886
         },
         {
             "busId":25,
@@ -1881,8 +1881,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1502.0491513075417,
-            "yearlyNetReactiveConsumption":172.17868108760157
+            "yearlyNetConsumption":1376.2249625515153,
+            "yearlyNetReactiveConsumption":149.9733692697823
         },
         {
             "busId":25,
@@ -1893,8 +1893,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1784.5178723640577,
-            "yearlyNetReactiveConsumption":120.11982858209053
+            "yearlyNetConsumption":1523.614953524017,
+            "yearlyNetReactiveConsumption":194.77615574882174
         },
         {
             "busId":25,
@@ -1905,8 +1905,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1858.3230715329234,
-            "yearlyNetReactiveConsumption":132.70157246137342
+            "yearlyNetConsumption":1270.080652908959,
+            "yearlyNetReactiveConsumption":112.90091599745517
         },
         {
             "busId":25,
@@ -1917,8 +1917,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1425.4047836150235,
-            "yearlyNetReactiveConsumption":184.05630373923398
+            "yearlyNetConsumption":1086.665780542349,
+            "yearlyNetReactiveConsumption":149.9947019725318
         },
         {
             "busId":25,
@@ -1927,10 +1927,10 @@
             "deviceId":157,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1687.0554318613563,
-            "yearlyNetReactiveConsumption":163.78425150966282
+            "yearlyNetConsumption":1501.06241036368,
+            "yearlyNetReactiveConsumption":129.08033380910905
         },
         {
             "busId":25,
@@ -1939,10 +1939,10 @@
             "deviceId":158,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1345.3797434714802,
-            "yearlyNetReactiveConsumption":155.27855567888145
+            "yearlyNetConsumption":1189.7817300473807,
+            "yearlyNetReactiveConsumption":153.9166070190815
         },
         {
             "busId":25,
@@ -1951,10 +1951,10 @@
             "deviceId":159,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1360.2471413798207,
-            "yearlyNetReactiveConsumption":133.36466580466833
+            "yearlyNetConsumption":1602.952813744605,
+            "yearlyNetReactiveConsumption":122.7484182069041
         },
         {
             "busId":25,
@@ -1965,8 +1965,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1339.213020707283,
-            "yearlyNetReactiveConsumption":143.85835473621677
+            "yearlyNetConsumption":1227.611795789528,
+            "yearlyNetReactiveConsumption":164.36155093527285
         },
         {
             "busId":25,
@@ -1979,8 +1979,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":4806.18659859872,
-            "yearlyNetReactiveConsumption":516.417922627787
+            "yearlyNetConsumption":5137.293282286167,
+            "yearlyNetReactiveConsumption":485.84759025188384
         },
         {
             "busId":25,
@@ -1989,10 +1989,10 @@
             "deviceId":162,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1521.6383057590683,
-            "yearlyNetReactiveConsumption":151.6225174271276
+            "yearlyNetConsumption":1389.7177421234417,
+            "yearlyNetReactiveConsumption":159.45913191411145
         },
         {
             "busId":25,
@@ -2003,8 +2003,8 @@
             "phases":[
                 3
             ],
-            "yearlyNetConsumption":1229.8902409713046,
-            "yearlyNetReactiveConsumption":137.0224502450292
+            "yearlyNetConsumption":1990.7463016636843,
+            "yearlyNetReactiveConsumption":145.36268715864497
         },
         {
             "busId":27,
@@ -2013,10 +2013,10 @@
             "deviceId":164,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1294.5860760230246,
-            "yearlyNetReactiveConsumption":145.93820145380283
+            "yearlyNetConsumption":1238.4098174819646,
+            "yearlyNetReactiveConsumption":140.9208556877647
         },
         {
             "busId":27,
@@ -2027,8 +2027,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1291.7017609514871,
-            "yearlyNetReactiveConsumption":143.52812083560306
+            "yearlyNetConsumption":1177.6263152956685,
+            "yearlyNetReactiveConsumption":131.98310556374508
         },
         {
             "busId":27,
@@ -2037,10 +2037,10 @@
             "deviceId":166,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1298.2459419434017,
-            "yearlyNetReactiveConsumption":120.1383053399413
+            "yearlyNetConsumption":1725.9976265001674,
+            "yearlyNetReactiveConsumption":135.86038263110723
         },
         {
             "busId":27,
@@ -2049,10 +2049,10 @@
             "deviceId":167,
             "exclusiveNight":false,
             "phases":[
-                2
+                3
             ],
-            "yearlyNetConsumption":992.6736699913915,
-            "yearlyNetReactiveConsumption":137.77281760614028
+            "yearlyNetConsumption":1832.318718846799,
+            "yearlyNetReactiveConsumption":167.14700287764225
         },
         {
             "busId":27,
@@ -2061,10 +2061,10 @@
             "deviceId":168,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1737.0107236376207,
-            "yearlyNetReactiveConsumption":139.4419643843784
+            "yearlyNetConsumption":1882.5656975422683,
+            "yearlyNetReactiveConsumption":142.70839737833268
         },
         {
             "busId":27,
@@ -2073,10 +2073,10 @@
             "deviceId":169,
             "exclusiveNight":false,
             "phases":[
-                1
+                3
             ],
-            "yearlyNetConsumption":1388.4286707876793,
-            "yearlyNetReactiveConsumption":147.7430567328863
+            "yearlyNetConsumption":1908.2589744499207,
+            "yearlyNetReactiveConsumption":142.9470269402543
         },
         {
             "busId":27,
@@ -2087,8 +2087,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1631.5414352340604,
-            "yearlyNetReactiveConsumption":171.79465838630017
+            "yearlyNetConsumption":1252.8531213662047,
+            "yearlyNetReactiveConsumption":108.6239413342307
         },
         {
             "busId":27,
@@ -2099,8 +2099,8 @@
             "phases":[
                 2
             ],
-            "yearlyNetConsumption":1223.4048494406452,
-            "yearlyNetReactiveConsumption":174.1736639135072
+            "yearlyNetConsumption":1305.6441574784558,
+            "yearlyNetReactiveConsumption":167.291496637279
         },
         {
             "busId":27,
@@ -2111,8 +2111,8 @@
             "phases":[
                 1
             ],
-            "yearlyNetConsumption":1323.960239060187,
-            "yearlyNetReactiveConsumption":136.44515334128909
+            "yearlyNetConsumption":1706.2442926732258,
+            "yearlyNetReactiveConsumption":101.42624920617959
         },
         {
             "busId":27,
@@ -2121,10 +2121,10 @@
             "deviceId":173,
             "exclusiveNight":false,
             "phases":[
-                1
+                2
             ],
-            "yearlyNetConsumption":1539.4442714223194,
-            "yearlyNetReactiveConsumption":170.29997909879347
+            "yearlyNetConsumption":1532.8525553432976,
+            "yearlyNetReactiveConsumption":145.26572998434486
         },
         {
             "busId":27,
@@ -2137,8 +2137,8 @@
                 2,
                 3
             ],
-            "yearlyNetConsumption":5378.938929421798,
-            "yearlyNetReactiveConsumption":582.3973241058497
+            "yearlyNetConsumption":3166.34632584313,
+            "yearlyNetReactiveConsumption":565.8248747867935
         },
         {
             "busId":27,
@@ -2147,10 +2147,10 @@
             "deviceId":175,
             "exclusiveNight":false,
             "phases":[
-                3
+                2
             ],
-            "yearlyNetConsumption":1658.072781341151,
-            "yearlyNetReactiveConsumption":122.61888817772827
+            "yearlyNetConsumption":1748.7832235024175,
+            "yearlyNetReactiveConsumption":147.07867046911446
         }
     ],
     "solarGens":[]

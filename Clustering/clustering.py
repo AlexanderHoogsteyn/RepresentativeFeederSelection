@@ -21,17 +21,17 @@ class FeatureSet:
 
     """
     def __init__(self, path='C:/Users/AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/POLA',
-                 include_n_customer=True, include_total_length=True, include_main_path=False, include_total_cons=False, \
-                 include_total_reactive_cons=False, include_n_PV=False, include_total_impedance=False, \
-                 include_average_length=False, include_average_impedance=False):
+                 include_n_customer=True, include_total_length=True, include_main_path=False, include_avg_cons=False, \
+                 include_avg_reactive_cons=False, include_n_PV=False, include_total_impedance=False, \
+                 include_average_length=False, include_average_impedance=False,include_empty_feeders=True):
         """
         Initialize
         """
         features = []
         self._path = path
-        list = ["Number of customers","Total yearly consumption (kWh)","Total yearly reactive consumption (kWh)","Number of PV installations", \
+        list = ["Number of customers","Yearly consumption per customer (kWh)","Yearly reactive consumption per customer (kWh)","Number of PV installations", \
                 "Total conductor length (km)","Main path length (km)","Average length to customer (km)", "Total line impedance (Ohm)","Average path impedance (Ohm)"]
-        includes = [include_n_customer, include_total_cons, include_total_reactive_cons, include_n_PV, \
+        includes = [include_n_customer, include_avg_cons, include_avg_reactive_cons, include_n_PV, \
                     include_total_length, include_main_path, include_average_length, include_total_impedance, include_average_impedance]
         self._feature_list = [list[i] for i in range(len(list)) if includes[i]]
         #cycle through all the json files
@@ -44,23 +44,29 @@ class FeatureSet:
             if include_n_customer == True:
                 row += [config_data['gridConfig']['totalNrOfEANS']]
 
-            if include_total_cons == True or include_n_PV == True or include_total_reactive_cons == True or \
+            if include_avg_cons == True or include_n_PV == True or include_avg_reactive_cons == True or \
                     include_average_length == True or include_total_impedance == True or include_average_impedance == True:
                 with open(os.path.join(os.path.dirname(self._path), devices_path)) as devices_file:
                     devices_data = json.load(devices_file)
-                    if include_total_cons == True:
+                    if include_avg_cons == True:
                         total_cons = 0
                         for device in devices_data['LVcustomers']:
-                            cons = device.get('yearlyNetConsumption')
+                            try:
+                                cons = device.get('yearlyNetConsumption')/config_data['gridConfig']['totalNrOfEANS']
+                            except ZeroDivisionError:
+                                cons = 0
                             try:        #Dirty fix because cons contained nan and None
                                 total_cons += float(cons)
                             except TypeError:
                                 print("yearlyNetConsumption contains NoneType")
                         row += [total_cons]
-                    if include_total_reactive_cons == True:
+                    if include_avg_reactive_cons == True:
                         total_reactive_cons = 0
                         for device in devices_data['LVcustomers']:
-                            reactive_cons = device.get('yearlyNetReactiveConsumption')
+                            try:
+                                reactive_cons = device.get('yearlyNetReactiveConsumption')/config_data['gridConfig']['totalNrOfEANS']
+                            except ZeroDivisionError:
+                                reactive_cons = 0
                             try:
                                 total_reactive_cons += float(reactive_cons)
                             except TypeError:
@@ -81,28 +87,28 @@ class FeatureSet:
                                 total_length += float(length)
                             except TypeError:
                                 print("cableLength contains NoneType")
-                        row += [total_length]
+                        row += [total_length/1000]
                     if include_main_path == True:
-                        row += [longest_path(0,branches_data)]
+                        row += [longest_path(0,branches_data)/1000]
                     if include_average_length == True:
                         total_length, n_customers = total_path_length(0, branches_data, devices_data)
                         try:
-                            row += [total_length/n_customers]
+                            row += [total_length/n_customers/1000]
                         except ZeroDivisionError:
                             row += [0]
                     if include_total_impedance == True:
-                        row += [total_path_impedance(0,branches_data,devices_data)[0]]
+                        row += [total_path_impedance(0,branches_data,devices_data)[0]/1000]
                     if include_average_impedance == True:
                         total_impedance, n_customers = total_path_impedance(0, branches_data, devices_data)
                         try:
-                            row += [total_impedance / n_customers]
+                            row += [total_impedance / n_customers/1000]
                         except ZeroDivisionError:
                             row += [0]
-
-            features.append(row)
-            self._IDs = [i[0] for i in features]
-            array = np.array(features)
-            self._features = array[:,1:]
+            if include_empty_feeders or config_data['gridConfig']['totalNrOfEANS'] > 0:
+                features.append(row)
+        self._IDs = [i[0] for i in features]
+        array = np.array(features)
+        self._features = array[:,1:]
 
 
         #write the data of interest to the feature-set
@@ -125,15 +131,20 @@ class FeatureSet:
     def set_feature(self,i,new_feature):
         self._features[:,i] = new_feature
 
-    def hierarchal_clustering(self,n_clusters=8,normalized=True):
-        if normalized == True:
+    def hierarchal_clustering(self,n_clusters=8,normalized=True,criterion='avg_silhouette'):
+        if normalized:
             scaler = StandardScaler()
             data = scaler.fit_transform(self.get_features())
         else:
             data = self.get_features()
-        return Cluster(AgglomerativeClustering(n_clusters).fit(data).labels_,'hierarchal clustering',normalized)
+        labels = AgglomerativeClustering(n_clusters).fit(data).labels_
+        if criterion == 'global_silhouette':
+            score = global_silhouette_criterion(data, labels)
+        if criterion == 'avg_silhouette':
+            score = silhouette_score(data, labels)
+        return Cluster(labels,'hierarchal clustering',normalized,1,criterion,score)
 
-    def k_means_clustering(self,n_clusters=8,normalized=True,n_repeats=1,criterion='global_silhouette'):
+    def k_means_clustering(self,n_clusters=8,normalized=True,n_repeats=1,criterion='avg_silhouette'):
         if normalized == True:
             scaler = StandardScaler()
             data = scaler.fit_transform(self.get_features())
@@ -142,23 +153,23 @@ class FeatureSet:
 
         if criterion == 'avg_silhouette':
             best_cluster_labels = np.zeros(np.size(data,0))
-            best_silhouette_avg = -1
+            score = -1
             for i in range(0,n_repeats):
                 i_cluster_labels = KMeans(n_clusters).fit(data).labels_
                 i_silhouette_avg = silhouette_score(data, i_cluster_labels)
-                if i_silhouette_avg > best_silhouette_avg:
-                    best_silhouette_avg = i_silhouette_avg
+                if i_silhouette_avg > score:
+                    score = i_silhouette_avg
                     best_cluster_labels = i_cluster_labels
         if criterion == 'global_silhouette':
             best_cluster_labels = np.zeros(np.size(data, 0))
-            best_silhouette_global = -1
+            score = -1
             for i in range(0, n_repeats):
                 i_cluster_labels = KMeans(n_clusters).fit(data).labels_
                 i_silhouette_global = global_silhouette_criterion(data, i_cluster_labels)
-                if i_silhouette_global > best_silhouette_global:
-                    best_silhouette_global = i_silhouette_global
+                if i_silhouette_global > score:
+                    score = i_silhouette_global
                     best_cluster_labels = i_cluster_labels
-        return Cluster(best_cluster_labels,'k-means++',normalized,n_repeats,criterion)
+        return Cluster(best_cluster_labels,'k-means++',normalized,n_repeats,criterion,score)
 
     def k_medoids_clustering(self,n_clusters=8,normalized=True,n_repeats=1,criterion='global_silhouette'):
         if normalized == True:
@@ -169,23 +180,23 @@ class FeatureSet:
 
         if criterion == 'avg_silhouette':
             best_cluster_labels = np.zeros(np.size(data,0))
-            best_silhouette_avg = -1
+            score = -1
             for i in range(0,n_repeats):
                 i_cluster_labels = KMedoids(n_clusters,init='k-medoids++').fit(data).labels_
                 i_silhouette_avg = silhouette_score(data, i_cluster_labels)
-                if i_silhouette_avg > best_silhouette_avg:
-                    best_silhouette_avg = i_silhouette_avg
+                if i_silhouette_avg > score:
+                    score = i_silhouette_avg
                     best_cluster_labels = i_cluster_labels
         if criterion == 'global_silhouette':
             best_cluster_labels = np.zeros(np.size(data, 0))
-            best_silhouette_global = -1
+            score = -1
             for i in range(0, n_repeats):
                 i_cluster_labels = KMedoids(n_clusters,init='k-medoids++').fit(data).labels_
                 i_silhouette_global = global_silhouette_criterion(data, i_cluster_labels)
-                if i_silhouette_global > best_silhouette_global:
-                    best_silhouette_global = i_silhouette_global
+                if i_silhouette_global > score:
+                    score = i_silhouette_global
                     best_cluster_labels = i_cluster_labels
-        return Cluster(best_cluster_labels, 'k-medoids++', normalized, n_repeats, criterion)
+        return Cluster(best_cluster_labels, 'k-medoids++', normalized, n_repeats, criterion, score)
 
     def gaussian_mixture_model(self,n_clusters=8,normalized=True,n_repeats=1):
         if normalized == True:
@@ -194,7 +205,16 @@ class FeatureSet:
         else:
             data = self.get_features()
 
-        return Cluster(np.array(GaussianMixture(n_components=n_clusters,n_init=n_repeats).fit_predict(data)), 'Gaussian mixture model', normalized,n_repeats)
+        best_cluster_labels = np.zeros(np.size(data, 0))
+        score = -1
+        reg_values = np.linspace(0.001,.1, num=n_repeats)
+        for i in range(0, n_repeats):
+            i_cluster_labels = np.array(GaussianMixture(n_components=n_clusters,reg_covar=reg_values[i]).fit_predict(data))
+            i_silhouette_avg = silhouette_score(data, i_cluster_labels)
+            if i_silhouette_avg > score:
+                score = i_silhouette_avg
+                best_cluster_labels = i_cluster_labels
+        return Cluster(best_cluster_labels, 'Gaussian mixture model', normalized,n_repeats,'avg_silhouette',score)
 
 def longest_path(busId,branches_data): #Could be faster if you 'pop' the branches such that they are not searched again
     longest_found = 0
@@ -229,17 +249,30 @@ def total_path_impedance(busId,branches_data,devices_data): #Could be faster if 
     return path_impedance, n_devices
 
 def lookup_impedance(cable_type): #Includes DC resistance only, supposes all loads are single phase connected
-    lookup_table = {"BT - RV 0,6/1 KV 3(1*150 KAL) + 1*95 KAL" : 0.124,
-                    "BT - RV 0,6/1 KV 4*95 KAL": 0.193,
-                    "aansluitkabel" : 0.727,
-                    "BT - RZ 0,6/1 KV 4*16 AL" : 1.15,
-                    "BT - RZ 0,6/1 KV 3*150 AL/95 ALM" : 0.124,
-                    "BT - RZ 0,6/1 KV 3*150 AL/80 ALM": 0.124,
-                    "BT - RZ 0,6/1 KV 3*50 AL/54,6 ALM" : 0.387,
-                    "BT - RV 0,6/1 KV 3(1*240 KAL) + 1*150 KAL" : 0.0754,
-                    "BT - RZ 0,6/1 KV 3*25 AL/54,6 ALM" : 0.727,
-                    "BT - RZ 0,6/1 KV 3*95 AL/54,6 ALM": 0.193
-                    }
+    lookup_table = {"BT - Desconocido BT": 0.222991031,
+                    "BT - MANGUERA" :1.23259888,
+                    "BT - RV 0,6/1 KV 2*16 KAL" :2.141891687,
+                    "BT - RV 0,6/1 KV 2*25 KAL" :1.343506234,
+                    "BT - RV 0,6/1 KV 3(1*150 KAL) + 1*95 KAL" :0.246053082,
+                    "BT - RV 0,6/1 KV 3(1*240 KAL) + 1*150 KAL" :0.178676325,
+                    "BT - RV 0,6/1 KV 3(1*240 KAL) + 1*95 KAL": 0.178676325,
+                    "BT - RV 0,6/1 KV 4*25 KAL" :1.343506234,
+                    "BT - RV 0,6/1 KV 4*50 KAL" :0.724490814,
+                    "BT - RV 0,6/1 KV 4*95 KAL" :0.369564719,
+                    "BT - RX 0,6/1 KV 2*16 Cu" :1.23259888,
+                    "BT - RX 0,6/1 KV 2*2 Cu": 9.900284087,
+                    "BT - RX 0,6/1 KV 2*4 Cu": 4.950568149,
+                    "BT - RX 0,6/1 KV 2*6 Cu": 3.300852163,
+                    "BT - RZ 0,6/1 KV 2*16 AL": 2.141891687,
+                    "BT - RZ 0,6/1 KV 3*150 AL/80 ALM": 0.246053082,
+                    "BT - RZ 0,6/1 KV 3*150 AL/95 ALM" :0.246053082,
+                    "BT - RZ 0,6/1 KV 3*25 AL/54,6 ALM" :1.343506234,
+                    "BT - RZ 0,6/1 KV 3*35 AL/54,6 ALM" :0.91225999,
+                    "BT - RZ 0,6/1 KV 3*50 AL/54,6 ALM" :0.724490814,
+                    "BT - RZ 0,6/1 KV 3*70 ALM/54,6 AL" :0.462932187,
+                    "BT - RZ 0,6/1 KV 3*95 AL/54,6 ALM" :0.369564719,
+                    "BT - RZ 0,6/1 KV 4*16 AL": 2.141891687,
+                    "aansluitkabel": 1.15974135}
     if cable_type in lookup_table:
         return lookup_table[cable_type]
     else:
@@ -247,13 +280,14 @@ def lookup_impedance(cable_type): #Includes DC resistance only, supposes all loa
         return 0.124
 
 class Cluster:
-    def __init__(self,clusters,algorithm,normalized=False,n_repeats=1,criterion='global_silhouette'):
+    def __init__(self,clusters,algorithm,normalized=False,n_repeats=1,criterion='global_silhouette',score=np.nan):
         self._clusters = clusters
         self._algorithm = algorithm
         self._normalized = normalized
         self._n_clusters = np.max(clusters)+1
         self._n_repeats = n_repeats
         self._criterion = criterion
+        self._score = score
 
     def get_clusters(self):
         return self._clusters
@@ -285,11 +319,17 @@ class Cluster:
     def get_n_clusters(self):
         return self._n_clusters
 
+    def get_score(self):
+        return self._score
+
+
+
+
 
 def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
     axis_labels = FeatureSet.get_feature_list()
     cluster_labels = Cluster.get_clusters()
-    plt.figure(figsize=(12, 10))
+    plt.figure(figsize=(8,6))
     if x_axis == None:
         x = FeatureSet.get_feature(0)
         x_axis = axis_labels[0]
@@ -307,7 +347,7 @@ def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
     plt.scatter(x,y, c=cluster_labels,alpha=0.85)
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
-    plt.title(Cluster.get_algorithm() +" with n_clusters = %d" % Cluster.get_n_clusters() + Cluster.get_repeats() + ', ' + Cluster.get_normalisation())
+    plt.title(Cluster.get_algorithm() +" with n_clusters = %d" % Cluster.get_n_clusters() + Cluster.get_repeats())
     plt.show()
 
 def silhouette_analysis(FeatureSet,Cluster):
@@ -388,7 +428,29 @@ def silhouette_analysis(FeatureSet,Cluster):
                  fontsize=14, fontweight='bold')
     plt.show()
 
-
+def compare_algorithms(FeatureSet,criterion,n,range):
+    results = {'Hierarchal':dict(),'K-means++':dict(),'K-medoids++':dict(),'GMM':dict()}
+    scores = np.zeros([4,len(range)])
+    for i in range:
+        results['Hierarchal'][i] = FeatureSet.hierarchal_clustering(n_clusters=i)
+        results['K-means++'][i] = FeatureSet.k_means_clustering(n_clusters=i, n_repeats=n)
+        results['K-medoids++'][i] = FeatureSet.k_medoids_clustering(n_clusters=i, n_repeats=n)
+        results['GMM'][i] = FeatureSet.gaussian_mixture_model(n_clusters=i, n_repeats=n)
+        scores[0,i-range[0]] = results['Hierarchal'][i].get_score()
+        scores[1,i-range[0]] = results['K-means++'][i].get_score()
+        scores[2,i-range[0]] = results['K-medoids++'][i].get_score()
+        scores[3,i-range[0]] = results['GMM'][i].get_score()
+        print(i," out of ",range[-1]," complete")
+    plt.figure(figsize=(12, 10))
+    plt.plot(range,scores[0,:],label='Hierarchal')
+    plt.plot(range,scores[1,:],label='K-means++')
+    plt.plot(range,scores[2,:],label='K-medoids++')
+    plt.plot(range,scores[3,:],label='GMM')
+    plt.legend()
+    plt.xlabel("number of clusters K")
+    plt.ylabel("average silhouette coefficient")
+    plt.show()
+    return results, scores
 def variance_ratio_criterion():
     raise NotImplementedError
 
