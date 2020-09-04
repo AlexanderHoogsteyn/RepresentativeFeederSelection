@@ -330,6 +330,7 @@ def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
     axis_labels = FeatureSet.get_feature_list()
     cluster_labels = Cluster.get_clusters()
     plt.figure(figsize=(8,6))
+    markers = ["s","o","D",">","<","v","+"]
     if x_axis == None:
         x = FeatureSet.get_feature(0)
         x_axis = axis_labels[0]
@@ -344,7 +345,9 @@ def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
         y = FeatureSet.get_feature(y_axis)
     else:
         raise AttributeError
-    plt.scatter(x,y, c=cluster_labels,alpha=0.85)
+    for i in range(0,Cluster.get_n_clusters()):
+        color = plt.cm.viridis(float(i) / (float(Cluster.get_n_clusters()) - 1.0))
+        plt.scatter(x[cluster_labels==i],y[cluster_labels==i], color=color,marker=markers[i],alpha=0.85)
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
     plt.title(Cluster.get_algorithm() +" with n_clusters = %d" % Cluster.get_n_clusters() + Cluster.get_repeats())
@@ -387,7 +390,7 @@ def silhouette_analysis(FeatureSet,Cluster):
                           0, ith_cluster_silhouette_values, facecolor=color, edgecolor=color, alpha=0.7)
 
         # Label the silhouette plots with their cluster numbers at the middle
-        ax1.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+        ax1.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i+1))
 
         # Compute the new y_lower for next plot
         y_lower = y_upper + 10  # 10 for the 0 samples
@@ -461,3 +464,49 @@ def global_silhouette_criterion(features,cluster_labels):
     for i in range(0,nb_clusters):
         score += scores[cluster_labels==i].mean()
     return score/nb_clusters
+
+def consensus_matrix(FeatureSet,n,min_n_clusters,max_n_clusters):
+    length = len(FeatureSet.get_feature(0))
+    similarity_matrix = np.zeros([length,length])
+    for i in range(0,n):
+        cluster_labels = FeatureSet.k_means_clustering(n_clusters=random.randint(min_n_clusters,max_n_clusters)).get_clusters()
+        for j in range(0,length):
+            for k in range(j+1,length):
+                if cluster_labels[j] == cluster_labels[k]:
+                    similarity_matrix[j][k] += 1
+                    similarity_matrix[k][j] += 1
+    return similarity_matrix/n
+
+def compare_ensemble_algorithms(FeatureSet,n,range):
+    results = {"Average fixed":dict(),"Average varying":dict(),"Single fixed":dict(),"Single varying":dict()}
+    scores = np.zeros([4,len(range)])
+    mat = consensus_matrix(FeatureSet, n, min(range), max(range))
+    scaler = StandardScaler()
+    features = FeatureSet.get_features()
+    features_normalised = scaler.fit_transform(features)
+    for i in range:
+        mat_2 = consensus_matrix(FeatureSet, n, i, i)
+        cluster_labels = AgglomerativeClustering(n_clusters=i, linkage='average').fit(mat).labels_
+        scores[0][i-range[0]] = silhouette_score(features_normalised, cluster_labels)
+        results["Average varying"][i] = Cluster(cluster_labels, 'Cluster ensemble', True,1,'avg_silhouette',scores[0][i-range[0]])
+
+        cluster_labels = AgglomerativeClustering(n_clusters=i, linkage='average').fit(mat_2).labels_
+        scores[1][i-range[0]] = silhouette_score(features_normalised, cluster_labels)
+        results["Average fixed"][i] = Cluster(cluster_labels, 'Cluster ensemble', True,1,'avg_silhouette',scores[1][i-range[0]])
+
+        cluster_labels = AgglomerativeClustering(n_clusters=i, linkage='single').fit(mat).labels_
+        scores[2][i - range[0]] = silhouette_score(features_normalised, cluster_labels)
+        results["Single varying"][i] = Cluster(cluster_labels, 'Cluster ensemble', True, 1, 'avg_silhouette',
+                                                scores[2][i - range[0]])
+
+        cluster_labels = AgglomerativeClustering(n_clusters=i, linkage='single').fit(mat_2).labels_
+        scores[3][i - range[0]] = silhouette_score(features_normalised, cluster_labels)
+        results["Single fixed"][i] = Cluster(cluster_labels, 'Cluster ensemble', True, 1, 'avg_silhouette',
+                                              scores[2][i - range[0]])
+    plt.plot(range,scores[0,:], label="average linkage")
+    plt.plot(range,scores[2,:], label="single linkage")
+    plt.plot(range,scores[1,:], label="average linkage fixed K")
+    plt.plot(range,scores[3,:], label="single linkage fixed K")
+    plt.legend()
+    plt.show()
+    return results, scores
