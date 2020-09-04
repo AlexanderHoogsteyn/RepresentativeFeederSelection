@@ -80,8 +80,11 @@ assert np.array(l.get_IDs())[l.get_feature(2)==0].all() == np.array([1246503, 12
 #plot_2D_clusters(l, l.gaussian_mixture_model(n_repeats=50),x_axis="Main path length (km)",y_axis="Total line impedance (Ohm)")
 #silhouette_analysis(l,l.gaussian_mixture_model(n_repeats=1000))
 
-f = FeatureSet(include_total_length=False, include_n_customer=True, include_avg_cons=True, include_avg_reactive_cons=True, include_main_path=True, include_total_impedance=True,include_empty_feeders=False)
-res, scores = compare_algorithms(f,'avg_silhouette',1000,range(2,15))
+f = FeatureSet(include_total_length=False, include_n_customer=True,include_avg_cons=True,include_avg_reactive_cons=True,include_main_path=True, include_average_impedance=True,include_empty_feeders=False)
+res, scores = compare_algorithms(f,'avg_silhouette',1000,range(2,25))
 pickle.dump(res,open("save.p","wb"))
-silhouette_analysis(f,res['GMM'][5])
-plot_2D_clusters(f, res['GMM'][5],x_axis="Yearly consumption per customer (kWh)",y_axis="Total line impedance (Ohm)")
+res_ensemble, scores_ensemble = compare_ensemble_algorithms(f,1000,range(2,25))
+pickle.dump(res_ensemble,open("save_ensemble.p","wb"))
+#silhouette_analysis(f,res['GMM'][5])
+#plot_2D_clusters(f, res['GMM'][5],x_axis="Yearly consumption per customer (kWh)",y_axis="Total line impedance (Ohm)")
+
