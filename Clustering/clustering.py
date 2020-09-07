@@ -510,3 +510,20 @@ def compare_ensemble_algorithms(FeatureSet,n,range):
     plt.legend()
     plt.show()
     return results, scores
+
+def get_representative_feeders(FeatureSet,Cluster):
+    nb_clusters = Cluster.get_n_clusters()
+    cluster_labels = Cluster.get_clusters()
+    features = FeatureSet.get_features()
+    feature_list = FeatureSet.get_feature_list()
+    dict = {'Number of feeders':[]}
+    for item in feature_list:
+        dict[item + " (mean)"] = []
+        dict[item + " (std)"] = []
+    for i in range(0,nb_clusters):
+        dict['Number of feeders'].append(np.count_nonzero(cluster_labels==i))
+        for item in feature_list:
+            mask = FeatureSet.get_feature(item)[cluster_labels==i]
+            dict[item + " (mean)"].append(mask.mean())
+            dict[item + " (std)"].append(mask.std())
+    return pd.DataFrame(dict)
