@@ -8,7 +8,7 @@ assert np.size(f.get_features(),1) == 2
 assert np.size(f.get_features(),0) == 160
 assert not np.isnan(f.get_features()).any()
 assert f.get_feature("Number of customers").all() == f.get_feature(0).all()
-#plot_2D_clusters(f,f.hierarchal_clustering())
+plot_2D_clusters(f,f.hierarchal_clustering())
 #silhouette_analysis(f,f.hierarchal_clustering(normalized=True))
 
 #Number of customers & Total yearly consumption
