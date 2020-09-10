@@ -3,15 +3,14 @@ using DataFrames
 using CSV
 using PowerModelsDistribution
 using Ipopt
-using Query
 using Statistics
 
 dir = "C:/Users/AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/"
-feeder = "POLA/65028_84569_configuration.json"
+feeder = "POLA/65019_74469_configuration.json"
 
-voltage_base = 0.230  # (kV)
-power_base = 0.5  # (MW)
-Z_base = voltage_base^2/power_base # (Ohm)
+const voltage_base = 0.230  # (kV)
+const power_base = 0.5  # (MW)
+const Z_base = voltage_base^2/power_base # (Ohm)
 
 function build_mathematical_network_model(dir, config_file_name, time_step,reference_profiles,scale_factor=1.0)
     #
@@ -39,11 +38,31 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
     network_model["bus"] = Dict{String,Any}()
     network_model["map"] = Dict{String,Any}()
     network_model["conductors"] = 3
-    network_model["baseMVA"] = power_base
-    network_model["basekv"] = voltage_base
+    network_model["baseMVA"] =  power_base
+    network_model["basekv"] =  voltage_base
     network_model["bus_lookup"] = Dict{Any,Int64}()
     network_model["load"] = Dict{String,Any}()
-    network_model["gen"] = Dict{String,Any}() # For now not implemented since there is no PV in the system
+    network_model["gen"] = Dict{String,Any}("1" => Dict{String,Any}(
+    "pg"            => [1.0, 1.0, 1.0],
+    "model"         => 2,
+    "connections"   => [1, 2, 3],
+    "shutdown"      => 0.0,
+    "startup"       => 0.0,
+    "configuration" => WYE,
+    "name"          => "virtual_generator",
+    "qg"            => [1.0, 1.0, 1.0],
+    "gen_bus"       => 1,
+    "vbase"         =>  voltage_base,
+    "source_id"     => "virtual_generator",
+    "index"         => 1,
+    "cost"          => [0.0, 0.0],
+    "gen_status"    => 1,
+    "qmax"          => [1.0, 1.0, 1.0],
+    "qmin"          => [-1.0, -1.0, -1.0],
+    "pmax"          => [1.0, 1.0, 1.0],
+    "pmin"          => [-1.0, -1.0, -1.0],
+    "ncost"         => 2
+    ))
     network_model["settings"] = Dict{String,Any}(
     "sbase_default"        => power_base,
     "vbases_default"       => Dict{String,Any}(), #No default is specified for now, since default is never used
@@ -57,8 +76,8 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
     open(dir * config_file_name,"r") do io
     configuration_json_dict = JSON.parse(io)
     end;
-    voltage_base = configuration_json_dict["gridConfig"]["basekV"]
-    power_base = configuration_json_dict["gridConfig"]["baseMVA"]
+    #voltage_base = configuration_json_dict["gridConfig"]["basekV"]
+    #power_base = configuration_json_dict["gridConfig"]["baseMVA"]
     configuration = configuration_json_dict["gridConfig"]["connection_configuration"]
     branches_file_name = configuration_json_dict["gridConfig"]["branches_file"]
     buses_file_name = configuration_json_dict["gridConfig"]["buses_file"]
@@ -71,7 +90,7 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
             id = bus["busId"] + 1 #Indexing starts at one in Julia
             id_s = string(id)
             network_model["bus_lookup"][id_s] = id
-            network_model["settings"]["vbases_default"][id_s] = voltage_base
+            network_model["settings"]["vbases_default"][id_s] =  voltage_base
 
             if id == 1 #Settings for slack bus
                 network_model["bus"][id_s] = Dict{String,Any}(
@@ -79,7 +98,7 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
                     "bus_type"  => 3,
                     "grounded"  => Bool[0, 0, 0],
                     "terminals" => [1, 2, 3],
-                    "vbase"     => voltage_base,
+                    "vbase"     =>  voltage_base,
                     "index"     => id,
                     "bus_i"     => id,
                     "vmin"      => [0.0, 0.0, 0.0],
@@ -92,7 +111,7 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
                     "bus_type"  => 1,
                     "grounded"  => Bool[0, 0, 0],
                     "terminals" => [1, 2, 3],
-                    "vbase"     => voltage_base,
+                    "vbase"     =>  voltage_base,
                     "index"     => id,
                     "bus_i"     => id,
                     "vmin"      => [0.0, 0.0, 0.0],
@@ -113,7 +132,7 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
             "configuration" => configuration=="star" ? WYE : DELTA,
             "name"          => id_s*"-"*device["coded_ean"],
             "status"        => 1,
-            "vbase"         => voltage_base,
+            "vbase"         =>  voltage_base,
             "vnom_kv"       => 1.0,
             "source_id"     => device["coded_ean"],
             "load_bus"      => device["busId"] + 1,
@@ -127,7 +146,7 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
         end;
         load_profile = pick_load_profile(cons,reference_profiles)   #Pick the best fit load profile
         load_profile = scale_factor*load_profile/500 #scale from kWh to MW
-        pd = load_profile[time_step]/power_base #convert to per-uits
+        pd = load_profile[time_step]/ power_base #convert to per-uits
         qd = pd/20 #Estimation for reactive power
 
         if length(device["phases"]) == 3   #Three phase connection
@@ -177,7 +196,7 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
     "aansluitkabel" => [1.15, 0.150]
     )
         for branch in branches_json_dict
-            id = branch["branchId"]
+            id = branch["branchId"] +1
             id_s = string(id)
             network_model["branch"][id_s] = Dict{String,Any}(
                 "shift"         => [0.0, 0.0, 0.0],
@@ -186,32 +205,32 @@ function build_mathematical_network_model(dir, config_file_name, time_step,refer
                 "switch"        => false,
                 "g_to"          => [0.0 0.0 0.0; 0.0 0.0 0.0; 0.0 0.0 0.0],
                 "c_rating_a"    => [0.8, 0.8, 0.8],
-                "vbase"         => voltage_base,
+                "vbase"         =>  voltage_base,
                 "g_fr"          => [0.0 0.0 0.0; 0.0 0.0 0.0; 0.0 0.0 0.0],
                 "t_connections" => [1, 2, 3],
                 "f_bus"         => branch["upBusId"]+1,
                 "b_fr"          => [0.0 0.0 0.0; 0.0 0.0 0.0; 0.0 0.0 0.0],
-                "c_rating_b"    => [1.2, 1.2, 1.2],
+                "c_rating_b"    => [0.8, 0.8, 0.8],
                 "br_status"     => 1,
                 "t_bus"         => branch["downBusId"]+1,
                 "b_to"          => [0.0 0.0 0.0; 0.0 0.0 0.0; 0.0 0.0 0.0],
-                "index"         => 1,
+                "index"         => id,
                 "angmin"        => [-1.0472, -1.0472, -1.0472],
                 "angmax"        => [1.0472, 1.0472, 1.0472],
                 "transformer"   => false,
                 "tap"           => [1.0, 1.0, 1.0],
-                "c_rating_c"    => [1.2, 1.2, 1.2]
+                "c_rating_c"    => [0.8, 0.8, 0.8]
             )
             if haskey(impedance_dict,branch["cableType"])
-                network_model["branch"][id_s]["br_r"] = impedance_dict[branch["cableType"]][1] .* branch["cableLength"] ./ Z_base .* [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
-                network_model["branch"][id_s]["br_x"] = impedance_dict[branch["cableType"]][2] .* branch["cableLength"] ./ Z_base .* [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
+                network_model["branch"][id_s]["br_r"] = impedance_dict[branch["cableType"]][1] .* (branch["cableLength"]/1000+1E-3) ./  Z_base .* [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
+                network_model["branch"][id_s]["br_x"] = impedance_dict[branch["cableType"]][2] .* (branch["cableLength"]/1000+1E-3) ./  Z_base .* [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
             end;
         end;
     end;
     return network_model
 end;
 
-function update_mathematical_network_model(network_model,time_step,reference_profiles,scale_factor)
+function update_mathematical_network_model!(network_model,time_step,reference_profiles,scale_factor)
     updated_network_model = network_model
     if eltype(reference_profiles) == Float64    #If no multidimensional array is given
         reference_profiles = [reference_profiles]
@@ -296,9 +315,9 @@ end;
 
 #reference_profiles = read_dublin_data()
 time_series_solution = Dict{Int32,Any}()
-for time_step in 1:1
-    network_model = build_mathematical_network_model(dir,feeder,time_step,reference_profiles,1E6)
-    solver = with_optimizer(Ipopt.Optimizer, print_level = 0, tol=1e-6)
-    result = run_mc_pf(network_model, ACPPowerModel, solver)
+network_model = build_mathematical_network_model(dir,feeder,1,reference_profiles,1.0)
+for time_step in 1:5
+    updated_network_model = update_mathematical_network_model(network_model,time_step,reference_profiles,1.0)
+    result = run_mc_pf(updated_network_model, ACPPowerModel, solver)
     time_series_solution[time_step] = result
 end;
