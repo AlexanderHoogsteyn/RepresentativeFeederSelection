@@ -239,7 +239,16 @@ function pick_load_profile(target_mean,reference_profiles)
     return load_profile
 end;
 
-function read_reference_profile_from_csv()
+"""
+Reads out load profiles from CSV file
+"""
+function read_reference_profile_from_csv(csv_name)
+    df = DataFrame(CSV.File(csv_name,delim=","))
+    reference_profiles = []
+    for i in names(df)
+        push!(reference_profiles,df[i])
+    end;
+    return reference_profiles
 end;
 
 """
