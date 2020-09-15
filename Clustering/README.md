@@ -25,7 +25,13 @@ The other attributes make it possible to specify which features to include:
 - include_total_impedance: The impedance between a customer and the head of the feeder summed up for all customers
 - include_average_length: The average path length between a customer and the head of the feeder
 - include_average_impedance: The average impedance between a customer and the head of the feeder
-The object will store the features in  a numpy array as well as some metadata such as list of the features used and the ID's of the feeders.
+The object will store the features in a numpy array as well as some metadata such as list of the features used and the ID's of the feeders. By default a FeatureSet will include the number of customers and the total conductor length. All other attributes that have been set to true will be included as well as shown in the following example:
+```Python
+featureset_1 = FeatureSet('C:/Home/Users/directory_of_json_files')
+featureset_2 = FeatureSet('C:/Home/Users/directory_of_json_files',include_average_impedance=True,include_empty_feeders=False)
+featureset_3 = FeatureSet('C:/Home/Users/directory_of_json_files',include_main_path=True, include_total_length=False)
+```
+
 ### Methods
 #### get_features(self)
 Method to obtain the features as a numpy 2D array, each column contains a feature.
@@ -60,6 +66,7 @@ returned
 By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
 (More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
 
+
 ### Limitations
 - A FeatureSet can only be made from GridDataCollections, this is a specific format of JSON files. This can be obtained by means of scripts like createDataCollection_dataframes_pola.py. If features from another source needs to be added, FeatureSet.__init__() needs adaption.
 - Features that contain NaN, None or other exceptional values will cause problems.
@@ -85,11 +92,22 @@ as well as the Cluster object which you obtained by performing one on the cluste
 on the FeatureSet.
 It can be chosen what is plotted on the x and y axis by specifying the name of a feature. This has to be the specific
 string corresponding to that feature such as "Yearly consumption per customer (kWh)" (These can be found using
-FeatureSet.get_feature_list() )
+FeatureSet.get_feature_list() ) If no axes are specified the first 2 features in the featurelist will be chosen.
+```Python
+plot_2D_clusters(featureset_3,featureset_3.k_means_clustering(n_clusters=4,n_repeats=1000))
+plot_2D_clusters(featureset_3,featureset_3.k_means_clustering(n_clusters=4,n_repeats=1000),x_axis="Number of customers",y_axis="Main path length (km)") #Set custom axes
+```
+![](paper/LV_feeder_clustering%20Figures/K-means.png)
+
 #### silhouette_analysis(FeatureSet,Cluster)
 Makes a silhouette analysis of the resulting clusters (more info: https://en.wikipedia.org/wiki/Silhouette_(clustering) ).
 You need to specify the FeatureSet object which contains all the used data as well as the Cluster object
 which you obtained by performing one on the clustering algorithm methods on the FeatureSet.
+```Python
+silhouette_analysis(featureset_1,featureset_1.gaussian_mixture_model(n_clusters=5))
+```
+![](paper/LV_feeder_clustering%20Figures/GMM_silhouette.png)
+
 #### compare_algorithms(FeatureSet,criterion,n=1,range)
 Makes a graph that compares the 4 algorithms against each other according to their average silhouette coefficient.
 A featureset needs to be specified to perform the analysis on.
@@ -101,7 +119,7 @@ The function returns the best found Cluster objects for each algorithm and clust
 result, scores = compare_algorithms(features,'avg_silhouette',1000,range(2,25))
 plot_2D_clusters(f,results['K-means++'][10],x_axis="Number of customers",y_axis="Main path length (km)")
 ```
-
+![](paper/LV_feeder_clustering%20Figures/comparison.png)
 
 
 ## Representative feeders
@@ -109,3 +127,6 @@ The goal of performing clustering on feeders in distribution networks is to exct
 #### get_representative_feeders(FeatureSet,Cluster)
 Function that returns a pandas dataframe with a summary of the found clusters and the mean and deviation of the
 features of the feeders in that cluster.
+```Python
+get_representative_feeders(featureset_1,featureset_1.k_medoids_clustering(n_clusters=6))
+```
