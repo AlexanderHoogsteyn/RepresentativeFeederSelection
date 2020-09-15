@@ -26,22 +26,59 @@ The other attributes make it possible to specify which features to include:
 - include_average_length: The average path length between a customer and the head of the feeder
 - include_average_impedance: The average impedance between a customer and the head of the feeder
 The object will store the features in  a numpy array as well as some metadata such as list of the features used and the ID's of the feeders.
+### Methods
+#### get_features(self)
+Method to obtain the features as a numpy 2D array, each column contains a feature.
+#### get_IDs(self)
+Method to obtain a numpy array of the feeders used, the indeces will correspond to the indeces on the rows
+obtained using get_features(), get_feature() or Clusters.get_clusters()
+#### get_feature_list(self)
+Method to obtain a list of the features used, the order of which will correspond to the order of the columns in
+get_features()
+#### get_feature_list(self)
+Method to obtain a particular feature from the featureset as a numpy array, you can specify an index to get the
+i'th feature or you can specify a name of a feature in the featureset as a string, the name has to be identical
+to the one's used in the get_feature_list(). For example: "Yearly consumption per customer (kWh)"
+#### hierarchal_clustering(self,n_clusters=8,normalized=True,criterion='avg_silhouette')
+Method that returns a clustering object obtained by performing hierarchal clustering of the specified featureset
+By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
+(More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+#### k_means_clustering(self,n_clusters=8,normalized=True,n_repeats=1,criterion='avg_silhouette')
+Method that returns a clustering object obtained by performing K-means++ on the specified featureset.
+A number of repetitions can be specified, the best result according to the specified criterion will be returned
+By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
+(More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+#### k_medoids_clustering(self,n_clusters=8,normalized=True,n_repeats=1,criterion='global_silhouette')
+Method that returns a clustering object obtained by performing K-medoids++ on the specified featureset.
+A number of repetitions can be specified, the best result according to the specified criterion will be returned
+By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
+(More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+#### gaussian_mixture_model(self,n_clusters=8,normalized=True,n_repeats=1):
+Method that returns a clustering object obtained by performing K-means++ on the specified featureset.
+A number of repetitions can be specified, the best result according to the average silhouette score will be
+returned
+By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
+(More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+
 ### Limitations
 - A FeatureSet can only be made from GridDataCollections, this is a specific format of JSON files. This can be obtained by means of scripts like createDataCollection_dataframes_pola.py. If features from another source needs to be added, FeatureSet.__init__() needs adaption.
 - Features that contain NaN, None or other exceptional values will cause problems.
-### Methods
+
 
 ## Cluster class
 A cluster object contains all info on the result obtained after performing a clustering algorithm. Most notably the
 labels to identify which cluster a feeder is allocated to. Besides that, the object contains some metadata about
 the number of clusters, which algorithm was used, the score of the result according to the specified criterion.
-
+### Methods
+#### get_clusters(self)
+Method to obtain the cluster labels as a numpy array, it is guaranteed to be in the same order as the feeder ID's
+obtained using FeatureSet.get_IDs()
 ### Limitations
 - Cluster objects can only be created by performing one of the four clustering algorithm methods on a FeatureSet. If another algorithm needs to be performed on the data in a FeatureSet a new method in the FeatureSet class needs to be added or alternatively the data in the FeatureSet object can be accessed using methods like get_features() or get_feature()
-### Methods
+
 
 ## Plots
-The following functions make it easy to visalize the results of the
+The following functions make it easy to visalize the results of the clustering algorithms
 #### plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None)
 Makes a 2D plot of the resulting clusters. You need to specify the FeatureSet object which contains all the used data
 as well as the Cluster object which you obtained by performing one on the clustering algorithm methods
@@ -61,7 +98,7 @@ A number of repetitions can be specified, K-means++, K-medoids++ and GMM will th
 result is kept. Hierarchal clustering is only performed once because its outcome is not stochastic.
 The function returns the best found Cluster objects for each algorithm and cluster size. They can be accessed as follows:
 ```Python
-result, scores = compare_algorithms(f,'avg_silhouette',1000,range(2,25))
+result, scores = compare_algorithms(features,'avg_silhouette',1000,range(2,25))
 plot_2D_clusters(f,results['K-means++'][10],x_axis="Number of customers",y_axis="Main path length (km)")
 ```
 
