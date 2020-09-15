@@ -128,3 +128,8 @@ In this technique different clustering results are combined. Different results c
 #### compare_ensemble_algorithms(FeatureSet,n,range)
 Different clusters are obtained by performing K-means++ (i) using n different initializations and keeping K fixed and (ii) using n different initializations while
 varying K over a specified range. The final clusters were extracted using (a) average linkage and (b) single linkage. average and single linkage are two variants of hierarchical clustering algorithms. Thus four variants were considered (ia, iia, ib, iib). The consensus matrix C is obtained using CSPA. The average silhouette coefficient is plotted for the four considered variants.
+```Python
+results, scores = compare_ensemble_algorithms(featureset_1,100,range(2,25))
+plot_2D_clusters(featureset_1, results_ens["Average varying"][i])
+plot_2D_clusters(featureset_1, results_ens["Average fixed"][i])
+```
