@@ -97,8 +97,6 @@ FeatureSet.get_feature_list() ) If no axes are specified the first 2 features in
 plot_2D_clusters(featureset_3,featureset_3.k_means_clustering(n_clusters=4,n_repeats=1000))
 plot_2D_clusters(featureset_3,featureset_3.k_means_clustering(n_clusters=4,n_repeats=1000),x_axis="Number of customers",y_axis="Main path length (km)") #Set custom axes
 ```
-![](paper/LV_feeder_clustering%20Figures/K-means.png)
-
 #### silhouette_analysis(FeatureSet,Cluster)
 Makes a silhouette analysis of the resulting clusters (more info: https://en.wikipedia.org/wiki/Silhouette_(clustering) ).
 You need to specify the FeatureSet object which contains all the used data as well as the Cluster object
@@ -106,8 +104,6 @@ which you obtained by performing one on the clustering algorithm methods on the 
 ```Python
 silhouette_analysis(featureset_1,featureset_1.gaussian_mixture_model(n_clusters=5))
 ```
-![](paper/LV_feeder_clustering%20Figures/GMM_silhouette.png)
-
 #### compare_algorithms(FeatureSet,criterion,n=1,range)
 Makes a graph that compares the 4 algorithms against each other according to their average silhouette coefficient.
 A featureset needs to be specified to perform the analysis on.
@@ -119,9 +115,6 @@ The function returns the best found Cluster objects for each algorithm and clust
 result, scores = compare_algorithms(features,'avg_silhouette',1000,range(2,25))
 plot_2D_clusters(f,results['K-means++'][10],x_axis="Number of customers",y_axis="Main path length (km)")
 ```
-![](paper/LV_feeder_clustering%20Figures/comparison.png)
-
-
 ## Representative feeders
 The goal of performing clustering on feeders in distribution networks is to exctract feeders that are representative for the entire network the following functions can help extract that information.
 #### get_representative_feeders(FeatureSet,Cluster)
@@ -130,3 +123,8 @@ features of the feeders in that cluster.
 ```Python
 get_representative_feeders(featureset_1,featureset_1.k_medoids_clustering(n_clusters=6))
 ```
+## Enesmble clustering
+In this technique different clustering results are combined. Different results can be obtained by using different algorithms, data, initializations or cluster sizes. These results are then combined using a consensus function such as CSPA to form a consensus matrix. Then an algorithm has to be chosen to extract the final clusters from the consensus matrix. Such an implementation can be performed using compare_ensemble_algorithms()
+#### compare_ensemble_algorithms(FeatureSet,n,range)
+Different clusters are obtained by performing K-means++ (i) using n different initializations and keeping K fixed and (ii) using n different initializations while
+varying K over a specified range. The final clusters were extracted using (a) average linkage and (b) single linkage. average and single linkage are two variants of hierarchical clustering algorithms. Thus four variants were considered (ia, iia, ib, iib). The consensus matrix C is obtained using CSPA. The average silhouette coefficient is plotted for the four considered variants.
