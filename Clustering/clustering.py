@@ -10,22 +10,40 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.mixture import GaussianMixture
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-#import seaborn as sns
+"""
+Toolset for clustering of feeders in a distribution network. To obtain
+representative feeders.
+Author: Alexander Hoogsteyn
+Date:   16-09-2020
+"""
 
 
 
 class FeatureSet:
     """
-    A class of ...
-
+    A Featureset object contains all the data that you want to use to perform the clustering.
+    The path attribute is used to specify the folder which contains the JSON files.
+    The include_empty_feeders is used to specify whether you want to include feeders that doe not have any devices i.e.
+    customers connected to it.
+    The other attributes make it possible to specify which features to include:
+        - include_n_customers: Number of devices i.e. customers connected to a feeder
+        - include_total_length: Total conductor length in the feeder
+        - include_main_path: Longest path in the network between a device and the head of the feeder
+        - include_avg_cons: The average active yearly energy consumption of the customers on a feeder
+        - include_avg_reactive_cons: Idem for reactive energy consumption
+        - include_n_PV: Number of PV installations on the network
+        - include_total_impedance: The impedance between a customer and the head of the feeder summed up for all customers
+        - include_average_length: The average path length between a customer and the head of the feeder
+        - include_average_impedance: The average impedance between a customer and the head of the feeder
+    The object will store the features in  a numpy array as well as some metadata such as list of the features used and
+    the ID's of the feeders.
     """
     def __init__(self, path='C:/Users/AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/POLA',
                  include_n_customer=True, include_total_length=True, include_main_path=False, include_avg_cons=False, \
                  include_avg_reactive_cons=False, include_n_PV=False, include_total_impedance=False, \
                  include_average_length=False, include_average_impedance=False,include_empty_feeders=True):
         """
-        Initialize
+        Initialize the featureset by reading out the data from JSON files in the specified directory
         """
         features = []
         if os.path.exists(path):
@@ -114,18 +132,32 @@ class FeatureSet:
         self._features = array[:,1:]
 
 
-        #write the data of interest to the feature-set
-
     def get_features(self):
+        """
+        Method to obtain the features as a numpy 2D array, each column contains a feature.
+        """
         return self._features
 
     def get_IDs(self):
+        """
+        Method to obtain a numpy array of the feeders used, the indeces will correspond to the indeces on the rows
+        obtained using get_features(), get_feature() or Clusters.get_clusters()
+        """
         return self._IDs
 
     def get_feature_list(self):
+        """
+        Method to obtain a list of the features used, the order of which will correspond to the order of the columns in
+        get_features()
+        """
         return self._feature_list
 
     def get_feature(self,i):
+        """
+        Method to obtain a particular feature from the featureset as a numpy array, you can specify an index to get the
+        i'th feature or you can specify a name of a feature in the featureset as a string, the name has to be identical
+        to the one's used in the get_feature_list(). For example: "Yearly consumption per customer (kWh)"
+        """
         if isinstance(i,str):
             ind = self.get_feature_list().index(i)
             return self._features[:,ind]
@@ -135,6 +167,11 @@ class FeatureSet:
         self._features[:,i] = new_feature
 
     def hierarchal_clustering(self,n_clusters=8,normalized=True,criterion='avg_silhouette'):
+        """
+        Method that returns a clustering object obtained by performing hierarchal clustering of the specified featureset
+        By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
+        (More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+        """
         if normalized:
             scaler = StandardScaler()
             data = scaler.fit_transform(self.get_features())
@@ -148,6 +185,12 @@ class FeatureSet:
         return Cluster(labels,'hierarchal clustering',normalized,1,criterion,score)
 
     def k_means_clustering(self,n_clusters=8,normalized=True,n_repeats=1,criterion='avg_silhouette'):
+        """
+        Method that returns a clustering object obtained by performing K-means++ on the specified featureset.
+        A number of repetitions can be specified, the best result according to the specified criterion will be returned
+        By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
+        (More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+        """
         if normalized == True:
             scaler = StandardScaler()
             data = scaler.fit_transform(self.get_features())
@@ -175,6 +218,12 @@ class FeatureSet:
         return Cluster(best_cluster_labels,'k-means++',normalized,n_repeats,criterion,score)
 
     def k_medoids_clustering(self,n_clusters=8,normalized=True,n_repeats=1,criterion='global_silhouette'):
+        """
+        Method that returns a clustering object obtained by performing K-medoids++ on the specified featureset.
+        A number of repetitions can be specified, the best result according to the specified criterion will be returned
+        By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
+        (More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+        """
         if normalized == True:
             scaler = StandardScaler()
             data = scaler.fit_transform(self.get_features())
@@ -202,6 +251,13 @@ class FeatureSet:
         return Cluster(best_cluster_labels, 'k-medoids++', normalized, n_repeats, criterion, score)
 
     def gaussian_mixture_model(self,n_clusters=8,normalized=True,n_repeats=1):
+        """
+        Method that returns a clustering object obtained by performing K-means++ on the specified featureset.
+        A number of repetitions can be specified, the best result according to the average silhouette score will be
+        returned
+        By default the features will be normalized first. By scaling the features to have a mean of 0 and unit variance.
+        (More info: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html)
+        """
         if normalized == True:
             scaler = StandardScaler()
             data = scaler.fit_transform(self.get_features())
@@ -219,7 +275,10 @@ class FeatureSet:
                 best_cluster_labels = i_cluster_labels
         return Cluster(best_cluster_labels, 'Gaussian mixture model', normalized,n_repeats,'avg_silhouette',score)
 
-def longest_path(busId,branches_data): #Could be faster if you 'pop' the branches such that they are not searched again
+def longest_path(busId,branches_data): #TODO: Could be faster if you 'pop' the branches such that they are not searched again
+    """
+    Backtracking algorithm to find the longest path in a feeder
+    """
     longest_found = 0
     for branch in branches_data:
         if branch.get("upBusId") == busId:
@@ -228,7 +287,11 @@ def longest_path(busId,branches_data): #Could be faster if you 'pop' the branche
                 longest_found = found
     return longest_found
 
-def total_path_length(busId,branches_data,devices_data): #Could be faster if you 'pop' the branches such that they are not searched again
+def total_path_length(busId,branches_data,devices_data): #TODO: Could be faster if you 'pop' the branches such that they are not searched again
+    """
+    Backtracking algorithm to find the total path length, which is the sum of all path lengths between each customer
+    and the head of the feeder.
+    """
     path_length = 0
     n_devices = 0
     for branch in branches_data:
@@ -239,7 +302,11 @@ def total_path_length(busId,branches_data,devices_data): #Could be faster if you
     n_devices += sum(1 for i in devices_data["LVcustomers"] if i['busId'] == busId)
     return path_length, n_devices
 
-def total_path_impedance(busId,branches_data,devices_data): #Could be faster if you 'pop' the branches such that they are not searched again
+def total_path_impedance(busId,branches_data,devices_data): #TODO: Could be faster if you 'pop' the branches such that they are not searched again
+    """
+    Backtracking Algorithm to find the total path impedance, This is identical to total_path_length() but
+    weighted according to the impedance/km
+    """
     path_impedance = 0
     n_devices = 0
     for branch in branches_data:
@@ -283,6 +350,11 @@ def lookup_impedance(cable_type): #Includes DC resistance only, supposes all loa
         return 0.124
 
 class Cluster:
+    """
+    A cluster object contains all info on the result obtained after performing a clustering algorithm. Most notably the
+    labels to identify which cluster a feeder is allocated to. Besides that, the object contains some metadata about
+    the number of clusters, which algorithm was used, the score of the result according to the specified criterion.
+    """
     def __init__(self,clusters,algorithm,normalized=False,n_repeats=1,criterion='global_silhouette',score=np.nan):
         self._clusters = clusters
         self._algorithm = algorithm
@@ -293,6 +365,10 @@ class Cluster:
         self._score = score
 
     def get_clusters(self):
+        """
+        Method to obtain the cluster labels as a numpy array, it is guaranteed to be in the same order as the feeder ID's
+        obtained using FeatureSet.get_IDs()
+        """
         return self._clusters
 
     def get_algorithm(self):
@@ -325,11 +401,15 @@ class Cluster:
     def get_score(self):
         return self._score
 
-
-
-
-
 def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
+    """
+    Makes a 2D plot of the resulting clusters. You need to specify the FeatureSet object which contains all the used data
+    as well as the Cluster object which you obtained by performing one on the clustering algorithm methods
+    on the FeatureSet.
+    It can be chosen what is plotted on the x and y axis by specifying the name of a feature. This has to be the specific
+    string corresponding to that feature such as "Yearly consumption per customer (kWh)" (These can be found using
+    FeatureSet.get_feature_list() ).
+    """
     axis_labels = FeatureSet.get_feature_list()
     cluster_labels = Cluster.get_clusters()
     plt.figure(figsize=(8,6))
@@ -357,6 +437,11 @@ def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
     plt.show()
 
 def silhouette_analysis(FeatureSet,Cluster):
+    """
+    Makes a silhouette analysis of the resulting clusters (more info: https://en.wikipedia.org/wiki/Silhouette_(clustering) ).
+    You need to specify the FeatureSet object which contains all the used data as well as the Cluster object
+    which you obtained by performing one on the clustering algorithm methods on the FeatureSet.
+    """
     features = FeatureSet.get_features()
     cluster_labels = Cluster.get_clusters()
     n_clusters = Cluster.get_n_clusters()
@@ -434,7 +519,14 @@ def silhouette_analysis(FeatureSet,Cluster):
                  fontsize=14, fontweight='bold')
     plt.show()
 
-def compare_algorithms(FeatureSet,criterion,n,range):
+def compare_algorithms(FeatureSet,criterion,n=1,range):
+    """
+    Makes a graph that compares the 4 algorithms against each other according to their average silhouette coefficient.
+    A featureset needs to be specified to perform the analysis on.
+    A range of number of clusters must be specified.
+    A number of repetitions can be specified, K-means++, K-medoids++ and GMM will then be repeated n times and the best
+    result is kept. Hierarchal clustering is only performed once because its outcome is not stochastical.
+    """
     results = {'Hierarchal':dict(),'K-means++':dict(),'K-medoids++':dict(),'GMM':dict()}
     scores = np.zeros([4,len(range)])
     for i in range:
@@ -457,6 +549,7 @@ def compare_algorithms(FeatureSet,criterion,n,range):
     plt.ylabel("average silhouette coefficient")
     plt.show()
     return results, scores
+
 def variance_ratio_criterion():
     raise NotImplementedError
 
@@ -469,6 +562,9 @@ def global_silhouette_criterion(features,cluster_labels):
     return score/nb_clusters
 
 def consensus_matrix(FeatureSet,n,min_n_clusters,max_n_clusters):
+    """
+    Function to build the consensus matrix needed for ensemble clustering
+    """
     length = len(FeatureSet.get_feature(0))
     similarity_matrix = np.zeros([length,length])
     for i in range(0,n):
@@ -481,6 +577,9 @@ def consensus_matrix(FeatureSet,n,min_n_clusters,max_n_clusters):
     return similarity_matrix/n
 
 def compare_ensemble_algorithms(FeatureSet,n,range):
+    """
+    Makes a graph to compare the results of the different enesemble algorithms against each other
+    """
     results = {"Average fixed":dict(),"Average varying":dict(),"Single fixed":dict(),"Single varying":dict()}
     scores = np.zeros([4,len(range)])
     mat = consensus_matrix(FeatureSet, n, min(range), max(range))
@@ -515,6 +614,10 @@ def compare_ensemble_algorithms(FeatureSet,n,range):
     return results, scores
 
 def get_representative_feeders(FeatureSet,Cluster):
+    """
+    Function that returns a pandas dataframe with a summary of the found clusters and the mean and deviation of the
+    features of the feeders in that cluster.
+    """
     nb_clusters = Cluster.get_n_clusters()
     cluster_labels = Cluster.get_clusters()
     feature_list = FeatureSet.get_feature_list()
