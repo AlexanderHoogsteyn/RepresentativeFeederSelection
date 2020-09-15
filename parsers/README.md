@@ -8,7 +8,8 @@ has it's information stored in 4 files:
 - Configuration: contains general information and lists the directory's of the other 3 files.
 - Devices: contains information about the devices i.e. customers connected. For example the EAN-number and connection capacity. The total yearly consumption (kWh) is included, in createGridDataCollection_dataframes_poly.py this is estimated based of 20 days of smart meter data. The phase connection is as for now, randomly allocated.
 - Branches: contains information on cable length, bus connections and type of each branch. The latter is used to determine the impedance of the branch
-- Buses: contains info on which bus is the slack bus and voltage limits on each bus. The voltage limits are added to model but are are only used if optimal powerflow calculations are performed. This script is however not supposed to be used for optimal powerflow calculations. If this is of interest, additional fields will have to be added to the data model.
+- Buses: contains info on which bus is the slack bus and voltage limits on each bus. The voltage limits are added to model but are are only used if optimal powerflow calculations are performed.
+This script is however not supposed to be used for optimal powerflow calculations. If this is of interest, additional fields will have to be added to the data model.
 The .JSON files should be in a folder, the directory of the folder should be specified on top of the script. As well as the configuration file of the feeder to be analyzed.
 ```Julia
 dir = "C:Home/User/folder/"

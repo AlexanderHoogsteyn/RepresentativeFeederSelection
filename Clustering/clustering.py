@@ -28,7 +28,10 @@ class FeatureSet:
         Initialize
         """
         features = []
-        self._path = path
+        if os.path.exists(path):
+            self._path = path
+        else:
+            raise NameError("Path doesn't exist")
         list = ["Number of customers","Yearly consumption per customer (kWh)","Yearly reactive consumption per customer (kWh)","Number of PV installations", \
                 "Total conductor length (km)","Main path length (km)","Average length to customer (km)", "Total line impedance (Ohm)","Average path impedance (Ohm)"]
         includes = [include_n_customer, include_avg_cons, include_avg_reactive_cons, include_n_PV, \
@@ -347,7 +350,7 @@ def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
         raise AttributeError
     for i in range(0,Cluster.get_n_clusters()):
         color = plt.cm.viridis(float(i) / (float(Cluster.get_n_clusters()) - 1.0))
-        plt.scatter(x[cluster_labels==i],y[cluster_labels==i], color=color,marker=markers[i],alpha=0.85)
+        plt.scatter(x[cluster_labels==i],y[cluster_labels==i], color=color,marker=markers[i%7],alpha=0.85)
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
     plt.title(Cluster.get_algorithm() +" with n_clusters = %d" % Cluster.get_n_clusters() + Cluster.get_repeats())
@@ -514,7 +517,6 @@ def compare_ensemble_algorithms(FeatureSet,n,range):
 def get_representative_feeders(FeatureSet,Cluster):
     nb_clusters = Cluster.get_n_clusters()
     cluster_labels = Cluster.get_clusters()
-    features = FeatureSet.get_features()
     feature_list = FeatureSet.get_feature_list()
     dict = {'Number of feeders':[]}
     for item in feature_list:
