@@ -13,6 +13,7 @@ def read_smartmeter_data():
     Reads the csv files with 20 day load profiles from smart meter data
     Parses all information to a DataFrame (including ID, reactive power (kWh),...)
     Removes outliers in "Activa E" and "S", "Reactiva 1" and "4"
+    TO DO: SME should be added
     """
     smartmeter_data = pd.DataFrame()
     for m in range(1, 8):
@@ -22,10 +23,11 @@ def read_smartmeter_data():
         else:
             smartmeter_data = smartmeter_data.append(
                 pd.read_csv(csv, sep=";", skipinitialspace=True, decimal=',', thousands=' '))
-            smartmeter_data["Activa E"].mask(smartmeter_data["Activa E"] > 200, np.nan, inplace=True)  # remove outliers
-            smartmeter_data["Activa S"].mask(smartmeter_data["Activa S"] > 200, np.nan, inplace=True)
-            smartmeter_data["Reactiva1"].mask(smartmeter_data["Reactiva1"] > 200, np.nan, inplace=True)  # remove outliers
-            smartmeter_data["Reactiva4"].mask(smartmeter_data["Reactiva4"] > 200, np.nan, inplace=True)
+
+            #smartmeter_data["Activa E"].mask(smartmeter_data["Activa E"] > 10, np.nan, inplace=True)  # remove Feeder transformer measurements
+            #smartmeter_data["Activa S"].mask(smartmeter_data["Activa S"] > 10, np.nan, inplace=True)
+            #smartmeter_data["Reactiva1"].mask(smartmeter_data["Reactiva1"] > 10, np.nan, inplace=True)
+            #smartmeter_data["Reactiva4"].mask(smartmeter_data["Reactiva4"] > 10, np.nan, inplace=True)
 
     # active_cons_dict = loadProfile.groupby("Referencia")[["Activa E", "Activa S", "Reactiva1"]].mean()
     # active_cons_dict += loadProfile.groupby("Referencia")["Activa S"].mean()    #include night tariff in yearly consumption
@@ -35,15 +37,19 @@ def read_smartmeter_data():
     return smartmeter_data
 
 
-def read_times_demand_data(filename="Hourly_profile.xlsx"):
+def read_times_demand_data(filename="Hourly_profile.xlsx",scenario="2030"):
     """
     Reads the TIMES demand sheet and parses it to a DataFrame
     """
     path = griddata_dir + "parsers/" + filename
+
     if not os.path.exists(path):  # Check whether path exist
         raise NameError("Path doesn't exist")
     else:
-        times_data = pd.read_excel(path, sheet_name="Demand", header=[1, 3], index_col=0)
+        if scenario == "2030":
+            times_data = pd.read_excel(path, sheet_name="Demand", header=[3],usecols="A,C:L",  index_col=0)
+        if scenario == "2050":
+            times_data = pd.read_excel(path, sheet_name="Demand", header=[3],usecols="A,N:W", index_col=0)
     times_data = times_data.dropna(axis='index', how='all')
     times_data = times_data.dropna(axis='columns', how='all')
     return times_data
@@ -74,20 +80,42 @@ def estimate_daily_load_profiles(smartmeter_data):
     load_profiles = pd.DataFrame()
     grouped = smartmeter_data.groupby("Referencia")
     for id, group in grouped:
-        long_load_profile = group.sort_values("Dia")["Activa E"]
-        load_profile = [np.nanmean(long_load_profile[i:20*24:24]) for i in range(0, 24)]
-        load_profiles[id] = load_profile
+        #group["Dia"] = pd.to_datetime(group["Dia"])
+        sorted_group = group.sort_values("Fecha")
+        long_load_profile = sorted_group["Activa E"] + sorted_group["Activa S"]
+        if long_load_profile.mean() < 2: #Elliminate feeder transformer measurements
+            load_profile = [np.nanmean(long_load_profile[i:20*24:24]) for i in range(0, 24)]
+            load_profiles[id] = load_profile
     return load_profiles
 
-def estimate_scale_factors(times_demand_data):
+def estimate_scale_factors(times_demand_data_2030,times_demand_data_2050,load_profiles):
     """
     Constructs a dictonary that contains scale factors for the different clusters for the different years
-    TO DO: Find a baseline for the 10 clusters, otherwise the other years cannot be scaled proportionally
+    TO DO: Scale clusters of 2020 appropriotally
+    TO DO: Implementation that scales every time step instead of according to the average increase
     """
     scale_factors = {"2020" : np.ones(10)}
-    #TO DO: set scale_factors["2030"] and scale_factors["2050"] appropriate
-    return scale_factors
 
+    total_pola_consumption = load_profiles.apply(np.nanmean) #(kW)
+    total_belgium_consumption = total_pola_consumption.sum()*100 #(kW)
+    total_belgium_consumption = total_belgium_consumption*(1e-6) #(GW)
+#    for column ,content in times_demand_data.items():
+    #TO DO: set scale_factors["2030"] and scale_factors["2050"] appropriate
+    cluster_weigths = np.zeros(10)
+    for day in range(0,365):
+        cluster_weigths[get_cluster(day)] += 1
+    cluster_weigths = cluster_weigths/365
+    factors_2030 = times_demand_data_2030.apply(sum,axis=1)
+    factors_2050 = times_demand_data_2050.apply(sum,axis=1)
+    factors_2030_avg = np.array([sum(factors_2030[i * 12:i * 12 + 12]) / 12 for i in range(0, 10)])
+    factors_2050_avg = np.array([sum(factors_2050[i * 12:i * 12 + 12]) / 12 for i in range(0, 10)])
+
+    weighted_total_2030 = sum(np.array([sum(factors_2030[i*12:i*12+12])/12 for i in range(0,10)])*cluster_weigths)
+    weighted_total_2050 = sum(np.array([sum(factors_2050[i*12:i*12+12])/12 for i in range(0,10)])*cluster_weigths)
+
+    scale_factors["2030"] = factors_2030_avg/total_belgium_consumption
+    scale_factors["2050"] = factors_2050_avg/total_belgium_consumption
+    return scale_factors
 
 def determine_shape(id, load_profiles, day_of_year=1):
     """
@@ -95,7 +123,6 @@ def determine_shape(id, load_profiles, day_of_year=1):
     For now the shape does not vary throughout the year
     """
     return load_profiles[id]
-
 
 def determine_scale(id, scale_factors, day_of_year=1,scenario="2020"):
     """
@@ -109,7 +136,7 @@ def get_cluster(day_of_year):
     """
     A more thoughtfull implementation needs to be done to map the day of the year to which of the 10 clusters a day belongs
     """
-    cluster = round(day_of_year/35)
+    cluster = round(day_of_year/40)
     return cluster
 
 def concatenate_daily_profiles(times_demand_data,load_profiles):
@@ -127,8 +154,8 @@ def concatenate_daily_profiles(times_demand_data,load_profiles):
     # Repeat for 2030
     for id, content in load_profiles.items():
         profile_year = np.array([])
-        for day in range(0,366):
-            profile_day = determine_scale(id, day_of_year=day) * determine_shape(id, load_profiles, day_of_year=day)
+        for day in range(0,365):
+            profile_day = determine_scale(id, day_of_year=day,scenario="2030") * determine_shape(id, load_profiles, day_of_year=day)
             profile_year = np.append(profile_year,profile_day)
         filename = griddata_dir + "Load profiles POLA/2030/profile_" + id + "_2030.csv"
         np.savetxt(filename,profile_year,delimiter=",")
@@ -137,14 +164,14 @@ def concatenate_daily_profiles(times_demand_data,load_profiles):
     for id, content in load_profiles.items():
         profile_year = np.array([])
         for day in range(0,366):
-            profile_day = determine_scale(id, day_of_year=day) * determine_shape(id, load_profiles, day_of_year=day)
+            profile_day = determine_scale(id, day_of_year=day,scenario="2050") * determine_shape(id, load_profiles, day_of_year=day)
             profile_year = np.append(profile_year,profile_day)
         filename = griddata_dir + "Load profiles POLA/2050/profile_" + id + "_2050.csv"
         np.savetxt(filename,profile_year,delimiter=",")
     return None
 
-smartmeter_data = read_smartmeter_data()
-times_demand_data = read_times_demand_data()
-times_generation_data = read_times_generation_data()
-load_profiles = estimate_daily_load_profiles(smartmeter_data)
-concatenate_daily_profiles(times_demand_data,load_profiles)
+# smartmeter_data = read_smartmeter_data()
+# times_demand_data = read_times_demand_data()
+# times_generation_data = read_times_generation_data()
+# load_profiles = estimate_daily_load_profiles(smartmeter_data)
+#concatenate_daily_profiles(times_demand_data,load_profiles)

@@ -438,8 +438,12 @@ def addCustomers(connection, conn_bus_id, customers_df, devices_dict,active_cons
 
         if 'ean' in conn_customers.columns:
             device_dict['ean'] = conn_row['ean']
+            device_dict['device_profile_file'] = 'Load profiles POLA/2020/profile_' + conn_row['ean'] + '_2020.csv'
+
         #add coded ean to device_dict anyway
         device_dict['coded_ean'] = conn_row['id']
+        device_dict['device_profile_file'] = 'Load profiles POLA/2020/profile_' + conn_row['id'] + '_2020.csv'
+
         #LVCustomers_list.append(device_dict)
 
 #        if conn_row['PV'] == 1:
