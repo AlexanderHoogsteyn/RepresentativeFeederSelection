@@ -420,14 +420,14 @@ def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
     elif x_axis in axis_labels:
         x = FeatureSet.get_feature(x_axis)
     else:
-        raise AttributeError
+        raise AttributeError("x-axis is not in FeatureSet")
     if y_axis == None:
         y = FeatureSet.get_feature(1)
         y_axis = axis_labels[1]
     elif y_axis in axis_labels:
         y = FeatureSet.get_feature(y_axis)
     else:
-        raise AttributeError
+        raise AttributeError("y-axis is not in FeatureSet")
     for i in range(0,Cluster.get_n_clusters()):
         color = plt.cm.viridis(float(i) / (float(Cluster.get_n_clusters()) - 1.0))
         plt.scatter(x[cluster_labels==i],y[cluster_labels==i], color=color,marker=markers[i%7],alpha=0.85)
@@ -519,7 +519,7 @@ def silhouette_analysis(FeatureSet,Cluster):
                  fontsize=14, fontweight='bold')
     plt.show()
 
-def compare_algorithms(FeatureSet,criterion,n=1,range):
+def compare_algorithms(FeatureSet,criterion,n=1,range=range(2,25)):
     """
     Makes a graph that compares the 4 algorithms against each other according to their average silhouette coefficient.
     A featureset needs to be specified to perform the analysis on.
