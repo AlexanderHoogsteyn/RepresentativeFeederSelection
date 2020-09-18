@@ -76,7 +76,7 @@ def estimate_daily_load_profiles(smartmeter_data):
     Day and night tariff measurements are added
     the smartdata needs to be sorted because its samples are not in chronological order as they were recieved by the DSO
     TO DO: The smartdata needs to be sorted first. The implementation I had was way too slow, so I commented
-    it out for now
+    it out for now (only a select amount of feeders have the problem that their values are out of order)
     """
     load_profiles = pd.DataFrame()
     grouped = smartmeter_data.groupby("Referencia")
@@ -191,10 +191,10 @@ def concatenate_daily_profiles(times_demand_data,load_profiles,scale_factors):
         np.savetxt(filename,profile_year,delimiter=",")
     return None
 
-#smartmeter_data = read_smartmeter_data()
-#times_demand_data_2030 = read_times_demand_data()
-#times_demand_data_2050 = read_times_demand_data(scenario=2050)
-#times_generation_data = read_times_generation_data()
-#load_profiles = estimate_daily_load_profiles(smartmeter_data)
-#scale_factors = estimate_scale_factors(times_demand_data_2030,times_demand_data_2050,load_profiles)
-#concatenate_daily_profiles(times_demand_data,load_profiles)
+smartmeter_data = read_smartmeter_data()
+times_demand_data_2030 = read_times_demand_data()
+times_demand_data_2050 = read_times_demand_data(scenario=2050)
+times_generation_data = read_times_generation_data()
+load_profiles = estimate_daily_load_profiles(smartmeter_data)
+scale_factors = estimate_scale_factors(times_demand_data_2030,times_demand_data_2050,load_profiles)
+concatenate_daily_profiles(times_demand_data,load_profiles)
