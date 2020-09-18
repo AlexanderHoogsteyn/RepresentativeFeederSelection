@@ -12,8 +12,6 @@ def read_smartmeter_data():
     """
     Reads the csv files with 20 day load profiles from smart meter data
     Parses all information to a DataFrame (including ID, reactive power (kWh),...)
-    Removes outliers in "Activa E" and "S", "Reactiva 1" and "4"
-    TO DO: SME should be added
     """
     smartmeter_data = pd.DataFrame()
     for m in range(1, 8):
@@ -48,10 +46,13 @@ def read_times_demand_data(filename="Hourly_profile.xlsx",scenario="2030"):
     else:
         if scenario == "2030":
             times_data = pd.read_excel(path, sheet_name="Demand", header=[3],usecols="A,C:L",  index_col=0)
-        if scenario == "2050":
+        elif scenario == "2050":
             times_data = pd.read_excel(path, sheet_name="Demand", header=[3],usecols="A,N:W", index_col=0)
+        else:
+            raise AttributeError("scenario does not exist")
     times_data = times_data.dropna(axis='index', how='all')
     times_data = times_data.dropna(axis='columns', how='all')
+
     return times_data
 
 
@@ -72,29 +73,40 @@ def read_times_generation_data(filename="Hourly_profile.xlsx"):
 def estimate_daily_load_profiles(smartmeter_data):
     """
     Build a Dataframe with EAN numbers as column names and 24 samples each containing 1h samples of the active power
-    Only day tariff is taken into account for now
-    the smartdata is sorted because its samples are not in chronological order as they were recieved by the DSO
-    TO DO: The load profiles don't look correct, my guess is that the sorting is not done correctly (perhaps the dates
-    are sorted alphabetically instead of chronologically)
+    Day and night tariff measurements are added
+    the smartdata needs to be sorted because its samples are not in chronological order as they were recieved by the DSO
+    TO DO: The smartdata needs to be sorted first. The implementation I had was way too slow, so I commented
+    it out for now
     """
     load_profiles = pd.DataFrame()
     grouped = smartmeter_data.groupby("Referencia")
     for id, group in grouped:
-        #group["Dia"] = pd.to_datetime(group["Dia"])
-        sorted_group = group.sort_values("Fecha")
-        long_load_profile = sorted_group["Activa E"] + sorted_group["Activa S"]
-        if long_load_profile.mean() < 2: #Elliminate feeder transformer measurements
-            load_profile = [np.nanmean(long_load_profile[i:20*24:24]) for i in range(0, 24)]
+        #group["Fecha"] = pd.to_datetime(group["Fecha"])
+        #group.sort_values("Fecha",inplace=true)
+        long_load_profile = group["Activa E"] + group["Activa S"]
+        if long_load_profile.median() < 5: #Elliminate feeder transformer measurements
+            load_profile = []
+            last_value = 0
+            for i in range(0,24):
+                value = np.median(long_load_profile[i:20*24:24])
+                if value > 10:      # Remove outliers by replacing by the last valid sample
+                    value = last_value
+                else:
+                    last_value = value
+                load_profile.append(value)
             load_profiles[id] = load_profile
     return load_profiles
 
-def estimate_scale_factors(times_demand_data_2030,times_demand_data_2050,load_profiles):
+def estimate_scale_factors(times_demand_data_2030,times_demand_data_2050,load_profiles,time_dependent=False):
     """
     Constructs a dictonary that contains scale factors for the different clusters for the different years
-    TO DO: Scale clusters of 2020 appropriotally
+    The factor represents the magnitude of a load profile in a certain cluster relative to the magnitude currently
+    by putting time_dependent to true or false you can choose to just use 1 average for each cluster
+    or 12 2h samples for each cluster.
+    TO DO: With the data I have I cannot determine how to weigh the clusters in the current scenario
     TO DO: Implementation that scales every time step instead of according to the average increase
     """
-    scale_factors = {"2020" : np.ones(10)}
+    scale_factors = dict()
 
     total_pola_consumption = load_profiles.apply(np.nanmean) #(kW)
     total_belgium_consumption = total_pola_consumption.sum()*100 #(kW)
@@ -112,9 +124,14 @@ def estimate_scale_factors(times_demand_data_2030,times_demand_data_2050,load_pr
 
     weighted_total_2030 = sum(np.array([sum(factors_2030[i*12:i*12+12])/12 for i in range(0,10)])*cluster_weigths)
     weighted_total_2050 = sum(np.array([sum(factors_2050[i*12:i*12+12])/12 for i in range(0,10)])*cluster_weigths)
-
-    scale_factors["2030"] = factors_2030_avg/total_belgium_consumption
-    scale_factors["2050"] = factors_2050_avg/total_belgium_consumption
+    if time_dependent:
+        scale_factors["2020"] = np.ones(120)
+        scale_factors["2030"] = np.array(factors_2030)
+        scale_factors["2050"] = np.array(factors_2050)
+    else:
+        scale_factors["2020"] = np.ones(10)
+        scale_factors["2030"] = factors_2030_avg/total_belgium_consumption
+        scale_factors["2050"] = factors_2050_avg/total_belgium_consumption
     return scale_factors
 
 def determine_shape(id, load_profiles, day_of_year=1):
@@ -139,9 +156,13 @@ def get_cluster(day_of_year):
     cluster = round(day_of_year/40)
     return cluster
 
-def concatenate_daily_profiles(times_demand_data,load_profiles):
+def concatenate_daily_profiles(times_demand_data,load_profiles,scale_factors):
     """
     concatenates the daily load profiles togheter for an entire year. and writes to csv file
+    TO DO: Although that time varying scale factors are already calculated they are not used yet
+    to build "profile_day"
+    TO DO: creating thousands of csv files takes a lot of time, are there functions that are faster
+    then savetxt from Numpy
     """
     for id, content in load_profiles.items():
         profile_year = np.array([])
@@ -155,7 +176,7 @@ def concatenate_daily_profiles(times_demand_data,load_profiles):
     for id, content in load_profiles.items():
         profile_year = np.array([])
         for day in range(0,365):
-            profile_day = determine_scale(id, day_of_year=day,scenario="2030") * determine_shape(id, load_profiles, day_of_year=day)
+            profile_day = determine_scale(id, scale_factors, day_of_year=day,scenario="2030") * determine_shape(id, load_profiles, day_of_year=day)
             profile_year = np.append(profile_year,profile_day)
         filename = griddata_dir + "Load profiles POLA/2030/profile_" + id + "_2030.csv"
         np.savetxt(filename,profile_year,delimiter=",")
@@ -170,8 +191,10 @@ def concatenate_daily_profiles(times_demand_data,load_profiles):
         np.savetxt(filename,profile_year,delimiter=",")
     return None
 
-# smartmeter_data = read_smartmeter_data()
-# times_demand_data = read_times_demand_data()
-# times_generation_data = read_times_generation_data()
-# load_profiles = estimate_daily_load_profiles(smartmeter_data)
+#smartmeter_data = read_smartmeter_data()
+#times_demand_data_2030 = read_times_demand_data()
+#times_demand_data_2050 = read_times_demand_data(scenario=2050)
+#times_generation_data = read_times_generation_data()
+#load_profiles = estimate_daily_load_profiles(smartmeter_data)
+#scale_factors = estimate_scale_factors(times_demand_data_2030,times_demand_data_2050,load_profiles)
 #concatenate_daily_profiles(times_demand_data,load_profiles)
