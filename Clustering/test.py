@@ -60,4 +60,3 @@ assert not np.isnan(l.get_features()).any()
 assert np.array(l.get_IDs())[l.get_feature(2)==0].all() == np.array([1246503, 1246507, 1464991, 1464997, 1465008, 1440552, 1450257,
        1931561, 1866127,   77873, 2366496, 2366498, 1405071]).all() #Cases with empty LVcustomer
 plot_2D_clusters(l, l.gaussian_mixture_model(n_repeats=50),x_axis="Main path length (km)",y_axis="Total line impedance (Ohm)")
-

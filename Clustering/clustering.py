@@ -41,7 +41,7 @@ class FeatureSet:
     def __init__(self, path='C:/Users/AlexH/OneDrive/Documenten/Julia/Implementation of network + clustering of network feeders/summer job Alexander/POLA',
                  include_n_customer=True, include_total_length=True, include_main_path=False, include_avg_cons=False, \
                  include_avg_reactive_cons=False, include_n_PV=False, include_total_impedance=False, \
-                 include_average_length=False, include_average_impedance=False,include_empty_feeders=True):
+                 include_average_length=False, include_average_impedance=False,include_empty_feeders=False):
         """
         Initialize the featureset by reading out the data from JSON files in the specified directory
         """
@@ -412,7 +412,8 @@ def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
     """
     axis_labels = FeatureSet.get_feature_list()
     cluster_labels = Cluster.get_clusters()
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(14,8))
+    plt.rc('font', size=18)  # controls default text sizes
     markers = ["s","o","D",">","<","v","+"]
     if x_axis == None:
         x = FeatureSet.get_feature(0)
@@ -431,9 +432,27 @@ def plot_2D_clusters(FeatureSet,Cluster,x_axis=None,y_axis=None):
     for i in range(0,Cluster.get_n_clusters()):
         color = plt.cm.viridis(float(i) / (float(Cluster.get_n_clusters()) - 1.0))
         plt.scatter(x[cluster_labels==i],y[cluster_labels==i], color=color,marker=markers[i%7],alpha=0.85)
+    IDs = np.array(FeatureSet.get_IDs())
+    size = 200
+    # plt.scatter(x[IDs == 84566],y[IDs == 84566],marker='*',s=size,color=plt.cm.viridis(float(cluster_labels[IDs == 84566]) / (float(Cluster.get_n_clusters()) - 1.0)))
+    # plt.scatter(x[IDs == 1274129],y[IDs == 1274129],marker='*',s=size,color=plt.cm.viridis(float(cluster_labels[IDs == 1274129]) / (float(Cluster.get_n_clusters()) - 1.0)))
+    # plt.scatter(x[IDs == 1596442],y[IDs == 1596442],marker='*',s=size,color=plt.cm.viridis(float(cluster_labels[IDs == 1596442]) / (float(Cluster.get_n_clusters()) - 1.0)))
+    # plt.scatter(x[IDs == 80035],y[IDs == 80035],marker='*',s=size,color=plt.cm.viridis(float(cluster_labels[IDs == 80035]) / (float(Cluster.get_n_clusters()) - 1.0)))
+    # plt.scatter(x[IDs == 1274125],y[IDs == 1274125],marker='*',s=size,color=plt.cm.viridis(float(cluster_labels[IDs == 1274125]) / (float(Cluster.get_n_clusters()) - 1.0)))
+    n = ["A","B", "C","D","E", "F"]
+    included_feeders = np.array([785383, 84566, 1274129,1596442, 80035, 1274125])
+
+    for i, id in enumerate(included_feeders):
+        color = plt.cm.viridis(
+            float(cluster_labels[IDs == id]) / (float(Cluster.get_n_clusters()) - 1.0))
+        #plt.scatter(x[IDs == id], y[IDs == id], marker='*', s=size, color=color)
+        plt.annotate(n[i], xy=(x[IDs == id][0], y[IDs == id][0]),color="gray",xycoords='data',
+            bbox=dict(boxstyle="round", fc="none", ec="gray"),
+            xytext=(30, -30), textcoords='offset points', ha='center',
+            arrowprops=dict(arrowstyle="->"))
     plt.xlabel(x_axis)
     plt.ylabel(y_axis)
-    plt.title(Cluster.get_algorithm() +" with n_clusters = %d" % Cluster.get_n_clusters() + Cluster.get_repeats())
+    #plt.title(Cluster.get_algorithm() +" with n_clusters = %d" % Cluster.get_n_clusters() + Cluster.get_repeats())
     plt.show()
 
 def silhouette_analysis(FeatureSet,Cluster):
@@ -613,7 +632,7 @@ def compare_ensemble_algorithms(FeatureSet,n,range):
     plt.show()
     return results, scores
 
-def get_representative_feeders(FeatureSet,Cluster):
+def get_representative_cluster(FeatureSet,Cluster):
     """
     Function that returns a pandas dataframe with a summary of the found clusters and the mean and deviation of the
     features of the feeders in that cluster.
@@ -624,11 +643,33 @@ def get_representative_feeders(FeatureSet,Cluster):
     dict = {'Number of feeders':[]}
     for item in feature_list:
         dict[item + " (mean)"] = []
-        dict[item + " (std)"] = []
+        #dict[item + " (std)"] = []
     for i in range(0,nb_clusters):
         dict['Number of feeders'].append(np.count_nonzero(cluster_labels==i))
         for item in feature_list:
             mask = FeatureSet.get_feature(item)[cluster_labels==i]
             dict[item + " (mean)"].append(mask.mean())
-            dict[item + " (std)"].append(mask.std())
+            #dict[item + " (std)"].append(mask.std())
+    return pd.DataFrame(dict)
+
+def get_representative_feeders(FeatureSet,Cluster):
+    """
+    Function that returns a pandas dataframe with a summary of the found clusters and the mean and deviation of the
+    features of the feeders in that cluster.
+    """
+    nb_clusters = Cluster.get_n_clusters()
+    cluster_labels = Cluster.get_clusters()
+    feature_list = FeatureSet.get_feature_list()
+    IDs = FeatureSet.get_IDs()
+
+    dict = {'Feeder ID':[]}
+    for item in feature_list:
+        dict[item + " (mean)"] = []
+        #dict[item + " (std)"] = []
+    for i in range(0, len(cluster_labels)):
+        dict['Feeder ID'].append(IDs[i])
+        for item in feature_list:
+            mask = FeatureSet.get_feature(item)[i]
+            dict[item + " (mean)"].append(mask)
+            #dict[item + " (std)"].append(mask.std())
     return pd.DataFrame(dict)

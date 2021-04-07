@@ -156,7 +156,7 @@ def get_cluster(day_of_year):
     cluster = round(day_of_year/40)
     return cluster
 
-def concatenate_daily_profiles(times_demand_data,load_profiles,scale_factors):
+def concatenate_daily_profiles(load_profiles,scale_factors):
     """
     concatenates the daily load profiles togheter for an entire year. and writes to csv file
     TO DO: Although that time varying scale factors are already calculated they are not used yet
@@ -167,7 +167,7 @@ def concatenate_daily_profiles(times_demand_data,load_profiles,scale_factors):
     for id, content in load_profiles.items():
         profile_year = np.array([])
         for day in range(0,366):
-            profile_day = determine_scale(id, day_of_year=day) * determine_shape(id, load_profiles, day_of_year=day)
+            profile_day = determine_scale(id, scale_factors, day_of_year=day) * determine_shape(id, load_profiles, day_of_year=day)
             profile_year = np.append(profile_year,profile_day)
         filename = griddata_dir + "Load profiles POLA/2020/profile_" + id + "_2020.csv"
         np.savetxt(filename,profile_year,delimiter=",")
@@ -185,16 +185,16 @@ def concatenate_daily_profiles(times_demand_data,load_profiles,scale_factors):
     for id, content in load_profiles.items():
         profile_year = np.array([])
         for day in range(0,366):
-            profile_day = determine_scale(id, day_of_year=day,scenario="2050") * determine_shape(id, load_profiles, day_of_year=day)
+            profile_day = determine_scale(id, scale_factors, day_of_year=day,scenario="2050") * determine_shape(id, load_profiles, day_of_year=day)
             profile_year = np.append(profile_year,profile_day)
         filename = griddata_dir + "Load profiles POLA/2050/profile_" + id + "_2050.csv"
         np.savetxt(filename,profile_year,delimiter=",")
     return None
 
 smartmeter_data = read_smartmeter_data()
-times_demand_data_2030 = read_times_demand_data()
-times_demand_data_2050 = read_times_demand_data(scenario=2050)
+times_demand_data_2030 = read_times_demand_data(scenario="2030")
+times_demand_data_2050 = read_times_demand_data(scenario="2050")
 times_generation_data = read_times_generation_data()
 load_profiles = estimate_daily_load_profiles(smartmeter_data)
 scale_factors = estimate_scale_factors(times_demand_data_2030,times_demand_data_2050,load_profiles)
-concatenate_daily_profiles(times_demand_data,load_profiles)
+concatenate_daily_profiles(load_profiles,scale_factors)

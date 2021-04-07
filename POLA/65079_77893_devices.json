@@ -5,14 +5,15 @@
             "coded_ean":"?0063028444",
             "connectionCapacity":76.0,
             "deviceId":0,
+            "device_profile_file":"Load profiles POLA/2020/profile_?0063028444_2020.csv",
             "exclusiveNight":false,
             "phases":[
                 1,
                 2,
                 3
             ],
-            "yearlyNetConsumption":4134.19616058025,
-            "yearlyNetReactiveConsumption":425.19481938620004
+            "yearlyNetConsumption":4695.921628411053,
+            "yearlyNetReactiveConsumption":598.8685505063404
         }
     ],
     "solarGens":[]

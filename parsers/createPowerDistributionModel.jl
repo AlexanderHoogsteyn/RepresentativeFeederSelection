@@ -5,7 +5,7 @@ using PowerModelsDistribution
 using PowerModels
 using Ipopt
 using Statistics
-using Plots
+#using Plots
 """
 Parser for distribution network model in .JSON format to
 PowerModelsDistribution MATHEMATICAL formultation (more info on this format:
@@ -273,6 +273,58 @@ function read_dublin_data()
     return reference_profiles
 end;
 
+
+function read_pola_data()
+    data = Dict{String,Any}("active"=> Dict{String,Any}(),
+                            "reactive"=> Dict{String,Any}())
+    for file in 1:7
+        csv_name = dir*"test_network/Sim_files_190128_OK_V0/GIS_data/file"*string(file)*".csv"
+        df = DataFrame(CSV.read(csv_name,delim=";",decimal=',', types=[String,String,String,String,String,String,Float64, Float64, Float64, Float64, Float64, Float64, String, String]))
+        active_power = [df."Activa E"[i] + df."Activa S"[i] for i=1:length(df."Activa E")]
+        reactive_power = [df."Reactiva1"[i] for i=1:length(df."Reactiva1")]
+        df = DataFrame(Fecha = df.Fecha, Referencia = df.Referencia, Activa = active_power, Reactiva = reactive_power)
+        data_file = unstack(df,:Fecha, :Referencia, :Activa)
+        data_file_reactive = unstack(df,:Fecha, :Referencia, :Reactiva)
+        dates = Array{Any}(undef, length(data_file.Fecha))
+        for i in 1:length(data_file.Fecha)
+            dates[i] = Dates.DateTime(data_file.Fecha[i], "dd/mm/yyyy HH:MM")
+        end;
+        data_file.Fecha = dates
+        sort!(data_file, :Fecha)
+        for i in 2:size(data_file,2)
+            load_profile = data_file[:,i]
+            if ismissing(load_profile[1])
+                load_profile[1] = 0
+            end;
+            for j in 2:length(load_profile)
+                if ismissing(load_profile[j])
+                    load_profile[j] = load_profile[j-1]
+                end;
+            end;
+            data["active"][names(data_file)[i]] = load_profile
+        end;
+        for i in 1:length(data_file_reactive.Fecha)
+            dates[i] = Dates.DateTime(data_file_reactive.Fecha[i], "dd/mm/yyyy HH:MM")
+        end;
+        data_file_reactive.Fecha = dates
+        sort!(data_file_reactive, :Fecha)
+        for i in 2:size(data_file_reactive,2)
+            load_profile = data_file_reactive[:,i]
+            if ismissing(load_profile[1])
+                load_profile[1] = 0
+            end;
+            for j in 2:length(load_profile)
+                if ismissing(load_profile[j])
+                    load_profile[j] = load_profile[j-1]
+                end;
+            end;
+            data["reactive"][names(data_file)[i]] = load_profile
+        end;
+
+    end;
+    return data
+end;
+
 """
 Builds a multinetwork model in a format similar to the one used in PowerModels
 but extended to be able to account for phase inbalance such as in PowerModelsDistribution
@@ -449,7 +501,12 @@ function naive_time_series_analysis()
     result = Dict{String,Any}()
     for (n,network) in multinetwork_model["nw"]
         network["per_unit"] = true
-        result[n] = run_mc_pf(network,ACPPowerModel, solver)
+        result[n] = solve_mc_pf(network,ACPPowerModel, solver)
     end;
     return result
 end;
+
+result = naive_time_series_analysis(48)
+
+export_load_data(result,48)
+export_voltage_data(result,48)
